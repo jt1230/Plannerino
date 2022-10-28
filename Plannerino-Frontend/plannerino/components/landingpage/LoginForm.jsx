@@ -30,7 +30,7 @@ export default function LoginForm() {
 
     if (data.get("email") == "admin" && data.get("password") == "admin") {
       console.log("Success!");
-      router.push("/dashboard");
+      router.push("/user");
     } else {
       console.log("Wrong credentials", "Logged in: " + isActiveUser);
     }

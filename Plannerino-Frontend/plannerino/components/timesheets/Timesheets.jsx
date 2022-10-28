@@ -7,7 +7,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Navbar from "../Navbar";
 
-export default function Dashboard() {
+export default function Timesheets() {
 
   return (
     <>  
@@ -17,7 +17,7 @@ export default function Dashboard() {
         </Grid>
         <Grid item xs={9} display="flex" borderLeft={1}>
           <Typography variant="h3" component="h1" gutterBottom>
-            Dashboard
+          TimesheetsPage
             yes
           </Typography>
         </Grid>
