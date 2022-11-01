@@ -10,32 +10,6 @@ export default function LandingPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isActiveUser, setIsActiveUser] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (isActiveUser) {
-      router.push("/dashboard");
-    }
-  }, [isLoggingIn]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
-    const data = new FormData(event.currentTarget);
-    console.log("Logging in...");
-    
-    if (data.get("email") == "admin" && data.get("password") == "admin") {
-      setIsActiveUser(true);
-      console.log({
-        email: data.get("email"),
-        password: data.get("password"),
-      });
-      console.log("Logged in: " + isActiveUser);
-    } else {
-      setIsLoggingIn(false);
-      setIsActiveUser(false);
-      console.log("Wrong credentials", "Logged in: " + isActiveUser);
-    }
-    setIsLoggingIn(true);
-  };
   
   return (
     <>

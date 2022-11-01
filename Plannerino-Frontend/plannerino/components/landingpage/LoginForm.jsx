@@ -8,33 +8,33 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { loginUser } from "../../lib/auth";
+import { useRecoilState } from "recoil";
+import authState from "../../atoms/authState"
 
 export default function LoginForm() {
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isActiveUser, setIsActiveUser] = useState(false);
+  const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (isLoggingIn && isActiveUser) {
-  //     router.push("/dashboard");
-  //   }
-  // }, [isLoggingIn]);
+  useEffect(() => {
+    if(auth != null){
+      router.push("/user");
+    }
+    else router.push("/");
 
-  const handleSubmit = (event) => {
+  }, [auth]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    // loginUser(data.get("email"), data.get("password"));
-
-    console.log("Logging in...");
-
-    if (data.get("email") == "admin" && data.get("password") == "admin") {
-      console.log("Success!");
-      router.push("/user");
-    } else {
-      console.log("Wrong credentials", "Logged in: " + isActiveUser);
+    const response = await fetch(`https://localhost:7063/api/Users/${data.get("email")}/${data.get("password")}`);
+    if(response.ok){
+      const data = await response.json();
+      setAuth(data);
     }
-    // setIsLoggingIn(true);
+    else{
+      alert("Login failed");
+    }
   };
 
   return (

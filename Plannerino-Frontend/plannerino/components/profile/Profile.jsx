@@ -12,10 +12,10 @@ export default function Profile() {
   return (
     <>  
       <Grid container spacing={2} height="100vh">
-        <Grid item xs={3}>
+      <Grid item xs={4}>
           <Navbar />
         </Grid>
-        <Grid item xs={9} display="flex" borderLeft={1}>
+        <Grid item xs={8} display="flex" borderLeft={1}>
           <Typography variant="h3" component="h1" gutterBottom>
 		        ProfilePage
             yes

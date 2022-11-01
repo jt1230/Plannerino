@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import Head from 'next/head';
 import CssBaseline from '@mui/material/CssBaseline';
+import { RecoilRoot } from 'recoil';
 
 
 function MyApp({ Component, pageProps }) {
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
         <meta name="description" content="Plan your time easier." />
         <link rel="icon" href="/favicon.jpg" />
       </Head>
-    <Component {...pageProps} />
+    <RecoilRoot>
+      <Component {...pageProps} />
+    </RecoilRoot>
   </>
       
   ); 
