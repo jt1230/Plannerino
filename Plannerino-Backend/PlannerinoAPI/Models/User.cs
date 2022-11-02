@@ -19,8 +19,8 @@ namespace PlannerinoAPI.Models
         [MaxLength(50)]
         public string Password { get; set; } = "";
         public bool IsAdmin { get; set; }
-        public List<Event> Events { get; set; } = new List<Event>();
-        public List<UserTask> Tasks { get; set; } = new List<UserTask>();
+        public ICollection<Event> Events { get; set; } = new List<Event>();
+        public ICollection<UserTask> Tasks { get; set; } = new List<UserTask>();
         public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
 
 

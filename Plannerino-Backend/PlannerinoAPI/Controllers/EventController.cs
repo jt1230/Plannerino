@@ -8,41 +8,67 @@ namespace PlannerinoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupsController : ControllerBase
+    public class EventController : ControllerBase
     {
-        private readonly IGroupRepository _groupRepository;
+        private readonly IEventRepository _eventRepository;
 
-        public GroupsController(IGroupRepository groupRepository)
+        public EventController(IEventRepository eventRepository)
         {
-            _groupRepository = groupRepository;
+            _eventRepository = eventRepository;
         }
 
-        // GET: api/Groups
+        // GET: api/Event
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
-        public IActionResult GetAllGroups()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Event>))]
+        public IActionResult GetEvents()
         {
-            var users = _groupRepository.GetAllGroups();
+            var events = _eventRepository.GetEvents();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(users);
+            return Ok(events);
         }
 
-        // GET: api/Groups/5
-        [HttpGet("{id}")]
-        //[ProducesResponseType(200, Type=typeof(User))]
-        //[ProducesResponseType(400)]
-        public IActionResult GetGroup(int id)
+        // GET: api/Event/5
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(200, Type = typeof(Event))]
+        [ProducesResponseType(400)]
+        public IActionResult GetEvent(int id)
         {
-            if (!_groupRepository.GroupExists(id))
+            if (!_eventRepository.EventExists(id))
             {
                 return NotFound();
             }
             
-            var user = _groupRepository.GetGroup(id);
+            var userEvent = _eventRepository.GetEvent(id);
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(user);
+            return Ok(userEvent);
+        }
+
+        // GET: api/Event/type
+        [HttpGet("{type}")]
+        [ProducesResponseType(200, Type = typeof(Event))]
+        [ProducesResponseType(400)]
+        public IActionResult GetEventByType(string type)
+        {
+            
+            var eventType = _eventRepository.GetEventByType(type);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(eventType);
+        }
+
+        // GET: api/Event/userId
+        [HttpGet("{userId:int}")]
+        [ProducesResponseType(200, Type = typeof(Event))]
+        [ProducesResponseType(400)]
+        public IActionResult GetEventByUser(int userId)
+        {
+
+            var userEvent = _eventRepository.GetEventByUser(userId);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(userEvent);
         }
 
 

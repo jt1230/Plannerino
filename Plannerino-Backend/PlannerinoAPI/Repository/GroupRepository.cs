@@ -13,14 +13,14 @@ namespace PlannerinoAPI.Repository
             _context = context;
         }
 
-        public ICollection<Group> GetAllGroups()
+        public ICollection<Group> GetGroups()
         {
             return _context.Groups.OrderBy(g => g.Id).ToList();
         }
 
         public Group GetGroup(int id)
         {
-            return _context.Groups.FirstOrDefault(g => g.Id == id);
+            return _context.Groups.First(g => g.Id == id);
         }
 
         public bool GroupExists(int id)

@@ -17,6 +17,10 @@ namespace PlannerinoAPI
         /// </summary>
         public void SeedDB()
         {
+            if (!dataContext.Events.Any())
+            {
+                
+            }
             
             if (!dataContext.UserGroups.Any())
             {

@@ -4,7 +4,7 @@ namespace PlannerinoAPI.Interfaces
 {
     public interface IGroupRepository
     {
-        ICollection<Group> GetAllGroups();
+        ICollection<Group> GetGroups();
         Group GetGroup(int id);
         bool GroupExists(int id);
         

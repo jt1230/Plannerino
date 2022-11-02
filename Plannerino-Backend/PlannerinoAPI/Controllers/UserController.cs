@@ -6,11 +6,11 @@ namespace PlannerinoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
 
-        public UsersController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
@@ -20,16 +20,16 @@ namespace PlannerinoAPI.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
         public IActionResult GetAllUsers()
         {
-            var users = _userRepository.GetAllUsers();
+            var users = _userRepository.GetUsers();
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(users);
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-        //[ProducesResponseType(200, Type=typeof(User))]
-        //[ProducesResponseType(400)]
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
         public IActionResult GetUser(int id)
         {
             if (!_userRepository.UserExists(id))
@@ -45,6 +45,8 @@ namespace PlannerinoAPI.Controllers
 
         // GET api/Users/mail
         [HttpGet("{mail}")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
         public IActionResult GetUserByMail(string mail)
         {
             var user = _userRepository.GetUserByEmail(mail);
@@ -55,6 +57,8 @@ namespace PlannerinoAPI.Controllers
 
         // GET api/Users/mail/pwd
         [HttpGet("{mail}/{pwd}")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
         public IActionResult GetUserByEmailAndPwd(string mail, string pwd)
         {
             var user = _userRepository.GetUserByEmailAndPwd(mail, pwd);
