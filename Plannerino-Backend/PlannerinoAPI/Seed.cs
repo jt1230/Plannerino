@@ -17,6 +17,7 @@ namespace PlannerinoAPI
         /// </summary>
         public void SeedDB()
         {
+            
             if (!dataContext.UserGroups.Any())
             {
                 var group1 = new Group()
@@ -41,7 +42,7 @@ namespace PlannerinoAPI
                     new UserGroup()
                     {
                         User = new User()
-                        {
+                        {   
                             FirstName = "John",
                             LastName = "Doe",
                             Email = "johndoe@mail.com",

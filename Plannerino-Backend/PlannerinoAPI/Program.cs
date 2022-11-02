@@ -1,12 +1,16 @@
 using PlannerinoAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using PlannerinoAPI;
+using PlannerinoAPI.Interfaces;
+using PlannerinoAPI.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
