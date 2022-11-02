@@ -21,8 +21,8 @@ namespace PlannerinoAPI.Models
         public bool IsAdmin { get; set; }
         //public List<Event> Events { get; set; } = new List<Event>()
         //public List<Group> Groups { get; set; } = new List<Group>();
-        public List<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
         public List<UserTask> Tasks { get; set; } = new List<UserTask>();
+        public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
 
 
     }

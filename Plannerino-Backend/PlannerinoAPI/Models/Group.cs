@@ -13,6 +13,6 @@ namespace PlannerinoAPI.Models
         public string Description { get; set; } = "";
         //public User Creator { get; set; } = new User();
         //public List<User> Users { get; set; } = new List<User>();
-        public List<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+        public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
     }
 }

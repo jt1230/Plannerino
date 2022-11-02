@@ -12,7 +12,7 @@ using PlannerinoAPI.Data;
 namespace PlannerinoAPI.Migrations
 {
     [DbContext(typeof(PlannerinoContext))]
-    [Migration("20221031135154_InitDB")]
+    [Migration("20221102101424_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,14 +84,6 @@ namespace PlannerinoAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Groups");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Fun planning for the Does",
-                            Name = "The Does"
-                        });
                 });
 
             modelBuilder.Entity("PlannerinoAPI.Models.User", b =>
@@ -128,44 +120,6 @@ namespace PlannerinoAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "admin",
-                            FirstName = "admin",
-                            IsAdmin = true,
-                            LastName = "admin",
-                            Password = "admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "johndoe@mail.com",
-                            FirstName = "John",
-                            IsAdmin = false,
-                            LastName = "Doe",
-                            Password = "johndoe"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Email = "marydoe@gmail.com",
-                            FirstName = "Mary",
-                            IsAdmin = false,
-                            LastName = "Doe",
-                            Password = "marydoe"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Email = "janedoe@gmail.com",
-                            FirstName = "Jane",
-                            IsAdmin = false,
-                            LastName = "Doe",
-                            Password = "janedoe"
-                        });
                 });
 
             modelBuilder.Entity("PlannerinoAPI.Models.UserGroup", b =>
@@ -174,9 +128,6 @@ namespace PlannerinoAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "GroupId");
