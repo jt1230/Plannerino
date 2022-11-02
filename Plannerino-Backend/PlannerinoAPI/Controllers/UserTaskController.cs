@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PlannerinoAPI.Data;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PlannerinoAPI.Dto;
 using PlannerinoAPI.Interfaces;
 using PlannerinoAPI.Models;
 
@@ -11,18 +11,20 @@ namespace PlannerinoAPI.Controllers
     public class UserTaskController : ControllerBase
     {
         private readonly IUserTaskRepository _userTaskRepository;
+        private readonly IMapper _mapper;
 
-        public UserTaskController(IUserTaskRepository userTaskRepository)
+        public UserTaskController(IUserTaskRepository userTaskRepository, IMapper mapper)
         {
             _userTaskRepository = userTaskRepository;
+            _mapper = mapper;
         }
-        
+
         // GET: api/UserTask
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<UserTask>))]
         public IActionResult GetUserTasks()
         {
-            var userTasks = _userTaskRepository.GetUserTasks();
+            var userTasks = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTasks());
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userTasks);
@@ -39,7 +41,7 @@ namespace PlannerinoAPI.Controllers
                 return NotFound();
             }
             
-            var userTask = _userTaskRepository.GetUserTask(id);
+            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTask(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userTask);
@@ -51,7 +53,7 @@ namespace PlannerinoAPI.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetUserTaskByCategory(string category)
         {
-            var userTask = _userTaskRepository.GetUserTaskByCategory(category);
+            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTaskByCategory(category));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userTask);
@@ -64,7 +66,7 @@ namespace PlannerinoAPI.Controllers
         public IActionResult GetUserTaskByUser(int userId)
         {
 
-            var userTask = _userTaskRepository.GetUserTaskByUser(userId);
+            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTaskByUser(userId));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userTask);

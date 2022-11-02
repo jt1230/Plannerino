@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PlannerinoAPI.Data;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PlannerinoAPI.Dto;
 using PlannerinoAPI.Interfaces;
 using PlannerinoAPI.Models;
 
@@ -11,10 +11,12 @@ namespace PlannerinoAPI.Controllers
     public class GroupController : ControllerBase
     {
         private readonly IGroupRepository _groupRepository;
+        private readonly IMapper _mapper;
 
-        public GroupController(IGroupRepository groupRepository)
+        public GroupController(IGroupRepository groupRepository, IMapper mapper)
         {
             _groupRepository = groupRepository;
+            _mapper = mapper;
         }
 
         // GET: api/Groups
@@ -22,7 +24,7 @@ namespace PlannerinoAPI.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Group>))]
         public IActionResult GetGroups()
         {
-            var group = _groupRepository.GetGroups();
+            var group = _mapper.Map<List<GroupDto>>(_groupRepository.GetGroups());
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(group);
@@ -39,7 +41,7 @@ namespace PlannerinoAPI.Controllers
                 return NotFound();
             }
             
-            var group = _groupRepository.GetGroup(id);
+            var group = _mapper.Map<UserDto>(_groupRepository.GetGroup(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(group);

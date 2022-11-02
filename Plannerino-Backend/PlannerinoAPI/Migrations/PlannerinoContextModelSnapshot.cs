@@ -174,7 +174,7 @@ namespace PlannerinoAPI.Migrations
             modelBuilder.Entity("PlannerinoAPI.Models.Event", b =>
                 {
                     b.HasOne("PlannerinoAPI.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -219,6 +219,8 @@ namespace PlannerinoAPI.Migrations
 
             modelBuilder.Entity("PlannerinoAPI.Models.User", b =>
                 {
+                    b.Navigation("Events");
+
                     b.Navigation("Tasks");
 
                     b.Navigation("UserGroups");

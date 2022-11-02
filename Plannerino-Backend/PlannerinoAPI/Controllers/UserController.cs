@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PlannerinoAPI.Dto;
 using PlannerinoAPI.Interfaces;
 using PlannerinoAPI.Models;
 
@@ -9,18 +11,20 @@ namespace PlannerinoAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         // GET: api/Users
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
-        public IActionResult GetAllUsers()
+        public IActionResult GetUsers()
         {
-            var users = _userRepository.GetUsers();
+            var users = _mapper.Map<List<UserDto>>(_userRepository.GetUsers());
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(users);
@@ -37,7 +41,7 @@ namespace PlannerinoAPI.Controllers
                 return NotFound();
             }
 
-            var user = _userRepository.GetUser(id);
+            var user = _mapper.Map<UserDto>(_userRepository.GetUser(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(user);
@@ -49,7 +53,7 @@ namespace PlannerinoAPI.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetUserByMail(string mail)
         {
-            var user = _userRepository.GetUserByEmail(mail);
+            var user = _mapper.Map<UserDto>(_userRepository.GetUserByEmail(mail));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(user);

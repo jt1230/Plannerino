@@ -12,8 +12,8 @@ using PlannerinoAPI.Data;
 namespace PlannerinoAPI.Migrations
 {
     [DbContext(typeof(PlannerinoContext))]
-    [Migration("20221102102105_SeedDb")]
-    partial class SeedDb
+    [Migration("20221102182259_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -176,7 +176,7 @@ namespace PlannerinoAPI.Migrations
             modelBuilder.Entity("PlannerinoAPI.Models.Event", b =>
                 {
                     b.HasOne("PlannerinoAPI.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -221,6 +221,8 @@ namespace PlannerinoAPI.Migrations
 
             modelBuilder.Entity("PlannerinoAPI.Models.User", b =>
                 {
+                    b.Navigation("Events");
+
                     b.Navigation("Tasks");
 
                     b.Navigation("UserGroups");

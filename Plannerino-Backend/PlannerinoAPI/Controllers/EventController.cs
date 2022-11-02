@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PlannerinoAPI.Data;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PlannerinoAPI.Dto;
 using PlannerinoAPI.Interfaces;
 using PlannerinoAPI.Models;
 
@@ -11,10 +11,12 @@ namespace PlannerinoAPI.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IMapper _mapper;
 
-        public EventController(IEventRepository eventRepository)
+        public EventController(IEventRepository eventRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
+            _mapper = mapper;
         }
 
         // GET: api/Event
@@ -22,7 +24,7 @@ namespace PlannerinoAPI.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Event>))]
         public IActionResult GetEvents()
         {
-            var events = _eventRepository.GetEvents();
+            var events = _mapper.Map<List<EventDto>>(_eventRepository.GetEvents());
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(events);
@@ -39,7 +41,7 @@ namespace PlannerinoAPI.Controllers
                 return NotFound();
             }
             
-            var userEvent = _eventRepository.GetEvent(id);
+            var userEvent = _mapper.Map<EventDto>(_eventRepository.GetEvent(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userEvent);
@@ -52,7 +54,7 @@ namespace PlannerinoAPI.Controllers
         public IActionResult GetEventByType(string type)
         {
             
-            var eventType = _eventRepository.GetEventByType(type);
+            var eventType = _mapper.Map<EventDto>(_eventRepository.GetEventByType(type));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(eventType);
@@ -65,7 +67,7 @@ namespace PlannerinoAPI.Controllers
         public IActionResult GetEventByUser(int userId)
         {
 
-            var userEvent = _eventRepository.GetEventByUser(userId);
+            var userEvent = _mapper.Map<EventDto>(_eventRepository.GetEventByUser(userId));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userEvent);

@@ -16,12 +16,7 @@ namespace PlannerinoAPI
         /// Seeds the database with some data
         /// </summary>
         public void SeedDB()
-        {
-            if (!dataContext.Events.Any())
-            {
-                
-            }
-            
+        {            
             if (!dataContext.UserGroups.Any())
             {
                 var group1 = new Group()
@@ -29,6 +24,43 @@ namespace PlannerinoAPI
                     Name = "The Doe's",
                     Description = "Family planning for the Doe family"
                 };
+
+                var john = new User()
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Email = "johndoe@mail.com",
+                    Password = "johndoe",
+                    IsAdmin = false,
+                };
+
+                var jane = new User()
+                {
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    Email = "janedoe@mail.com",
+                    Password = "janedoe",
+                    IsAdmin = false,
+                };
+
+                var mary = new User()
+                {
+                    FirstName = "Mary",
+                    LastName = "Doe",
+                    Email = "marydoe@mail.com",
+                    Password = "marydoe",
+                    IsAdmin = false,
+                };
+
+                var joseph = new User()
+                {
+                    FirstName = "Joseph",
+                    LastName = "Doe",
+                    Email = "josephdoe@mail.com",
+                    Password = "josephdoe",
+                    IsAdmin = false,
+                };
+
 
                 var userGroups = new List<UserGroup>()
                 {
@@ -45,53 +77,94 @@ namespace PlannerinoAPI
                     },
                     new UserGroup()
                     {
-                        User = new User()
-                        {   
-                            FirstName = "John",
-                            LastName = "Doe",
-                            Email = "johndoe@mail.com",
-                            Password = "johndoe",
-                            IsAdmin = false,
-                        },
+                        User = john,
                         Group = group1,
                     },
                     new UserGroup()
                     {
-                        User = new User()
-                        {
-                            FirstName = "Jane",
-                            LastName = "Doe",
-                            Email = "janedoe@mail.com",
-                            Password = "janedoe",
-                            IsAdmin = false,
-                        },
+                        User = jane,
                         Group = group1,
                     },
                     new UserGroup()
                     {
-                        User = new User()
-                        {
-                            FirstName = "Mary",
-                            LastName = "Doe",
-                            Email = "marydoe@mail.com",
-                            Password = "marydoe",
-                            IsAdmin = false,
-                        },
+                        User = mary,
                         Group = group1,
                     },
                     new UserGroup()
                     {
-                        User = new User()
-                        {
-                            FirstName = "Joseph",
-                            LastName = "Doe",
-                            Email = "josephdoe@mail.com",
-                            Password = "josephdoe",
-                            IsAdmin = false,
-                        },
+                        User = joseph,
                         Group = group1,
                     }
                 };
+
+                if(!dataContext.Events.Any())
+                {
+                    var events = new List<Event>()
+                    {
+                        new Event()
+                        {
+                            Title = "Dinner with Jane",
+                            Description = "@Takame",
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now,
+                            Type = "Home",
+                            User = john,
+                        },
+                        new Event()
+                        {
+                            Title = "Dinner with John",
+                            Description = "@Takame",
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now,
+                            Type = "Home",
+                            User = jane,
+                        },
+                        new Event()
+                        {
+                            Title = "Visit the dentist",
+                            Description = "",
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now,
+                            Type = "Home",
+                            User = jane,
+                        },
+                    };
+                    dataContext.Events.AddRange(events);
+                    dataContext.SaveChanges();
+                }
+
+                if (!dataContext.Tasks.Any())
+                {
+                    var tasks = new List<UserTask>()
+                    {
+                        new UserTask()
+                        {
+                            Title = "ICA",
+                            Category = "Groceries",
+                            Description = "Milk, eggs, bread, cheese, butter",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "Willys",
+                            Category = "Groceries",
+                            Description = "Chicken, beef, pork",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "Hemköp",
+                            Category = "Groceries",
+                            Description = "Toilet paper",
+                            IsCompleted = true,
+                            User = jane,
+                        },
+                    };
+                    dataContext.Tasks.AddRange(tasks);
+                    dataContext.SaveChanges();
+                }
                 dataContext.UserGroups.AddRange(userGroups);
                 dataContext.SaveChanges();
             }

@@ -4,7 +4,7 @@
 
 namespace PlannerinoAPI.Migrations
 {
-    public partial class SeedDb : Migration
+    public partial class SeedDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
