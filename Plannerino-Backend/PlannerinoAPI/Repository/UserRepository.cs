@@ -32,14 +32,20 @@ namespace PlannerinoAPI.Repository
         {
             return _context.Users.First(u => u.Email == email && u.Password == pwd);
         }
-        public ICollection<Event> GetEventsFromAUser(int eventId)
+
+        public ICollection<Group> GetGroupsFromAUser(int userId)
         {
-            throw new NotImplementedException();
+            return _context.UserGroups.Where(e => e.UserId == userId).Select(ug => ug.Group).ToList();
         }
 
-        public ICollection<Task> GetTasksFromAUser(int taskId)
+        public ICollection<Event> GetEventsFromAUser(int userId)
         {
-            throw new NotImplementedException();
+            return _context.Events.Where(e => e.User.Id == userId).ToList();
+        }
+
+        public ICollection<UserTask> GetTasksFromAUser(int userId)
+        {
+            return _context.Tasks.Where(t => t.User.Id == userId).ToList();
         }
 
         public bool UserExists(int id)
@@ -47,5 +53,17 @@ namespace PlannerinoAPI.Repository
             return _context.Users.Any(u => u.Id == id);
         }
 
+        public bool CreateUser(User user)
+        {
+            _context.Add(user);
+            return Save();
+            
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
     }
 }

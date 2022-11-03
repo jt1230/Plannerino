@@ -22,10 +22,28 @@ namespace PlannerinoAPI.Repository
         {
             return _context.Groups.First(g => g.Id == id);
         }
+        public ICollection<User> GetUsersFromAGroup(int groupId)
+        {
+            return _context.UserGroups.Where(u => u.Group.Id == groupId).Select(ug => ug.User).ToList();
+        }
 
         public bool GroupExists(int id)
         {
             return _context.Groups.Any(g => g.Id == id);
         }
+
+        public bool CreateGroup(Group group)
+        {
+            _context.Add(group);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
+
+       
     }    
 }

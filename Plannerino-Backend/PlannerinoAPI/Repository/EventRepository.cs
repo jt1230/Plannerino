@@ -36,5 +36,17 @@ namespace PlannerinoAPI.Repository
         {
             return _context.Events.Any(e => e.Id == id);
         }
+
+        public bool CreateEvent(Event userEvent)
+        {
+            _context.Add(userEvent);
+            return Save();
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
     }    
 }

@@ -11,11 +11,13 @@ namespace PlannerinoAPI.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public EventController(IEventRepository eventRepository, IMapper mapper)
+        public EventController(IEventRepository eventRepository, IUserRepository userRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -60,8 +62,8 @@ namespace PlannerinoAPI.Controllers
             return Ok(eventType);
         }
 
-        // GET: api/Event/userId
-        [HttpGet("{userId:int}")]
+        // GET: api/Event/userId/user
+        [HttpGet("{userId:int}/user")]
         [ProducesResponseType(200, Type = typeof(Event))]
         [ProducesResponseType(400)]
         public IActionResult GetEventByUser(int userId)
@@ -73,7 +75,40 @@ namespace PlannerinoAPI.Controllers
             return Ok(userEvent);
         }
 
+        // POST: api/Event
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(Event))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCategory([FromQuery] int userId, [FromBody] EventDto eventCreate)
+        {
+            if (eventCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var userEvent = _eventRepository.GetEvents().FirstOrDefault(u => string.Equals(u.Title, eventCreate.Title, StringComparison.OrdinalIgnoreCase));
+            if (userEvent != null)
+            {
+                ModelState.AddModelError("", "Group already exists!");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var eventToCreate = _mapper.Map<Event>(eventCreate);
+
+            eventToCreate.User = _userRepository.GetUser(userId);
+
+            if (!_eventRepository.CreateEvent(eventToCreate))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving the event {eventToCreate.Title}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
+        
         //// POST api/Groups
         //[HttpPost]
         //public async Task<IActionResult> Post(Group group)

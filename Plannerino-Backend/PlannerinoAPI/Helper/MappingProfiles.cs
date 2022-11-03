@@ -9,9 +9,13 @@ namespace PlannerinoAPI.Helper
         public MappingProfiles()
         {
             CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
             CreateMap<Event, EventDto>();
+            CreateMap<EventDto, Event>();
             CreateMap<Group, GroupDto>();
+            CreateMap<GroupDto, Group>();
             CreateMap<UserTask, UserTaskDto>();
+            CreateMap<UserTaskDto, UserTask>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace PlannerinoAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Users
+        // GET: api/User
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
         public IActionResult GetUsers()
@@ -30,7 +30,7 @@ namespace PlannerinoAPI.Controllers
             return Ok(users);
         }
 
-        // GET: api/Users/5
+        // GET: api/User/5
         [HttpGet("{id:int}")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(400)]
@@ -65,10 +65,93 @@ namespace PlannerinoAPI.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetUserByEmailAndPwd(string mail, string pwd)
         {
-            var user = _userRepository.GetUserByEmailAndPwd(mail, pwd);
+            var user = _mapper.Map<UserDto>(_userRepository.GetUserByEmailAndPwd(mail, pwd));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(user);
+        }
+
+        // GET api/Users/2/groups
+        [HttpGet("{userId:int}/groups")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult GetGroupsFromAUser(int userId)
+        {
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
+            
+            var user = _mapper.Map<List<GroupDto>>(_userRepository.GetGroupsFromAUser(userId));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(user);
+        }
+
+        // GET api/User/2/events
+        [HttpGet("{userId:int}/events")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult GetEventsFromAUser(int userId)
+        {
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
+
+            var user = _mapper.Map<List<EventDto>>(_userRepository.GetEventsFromAUser(userId));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(user);
+        }
+
+        // GET api/User/2/tasks
+        [HttpGet("{userId:int}/tasks")]
+        [ProducesResponseType(200, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult GetTasksFromAUser(int userId)
+        {
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
+
+            var user = _mapper.Map<List<UserTaskDto>>(_userRepository.GetTasksFromAUser(userId));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(user);
+        }
+
+        // POST: api/Users
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(User))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCategory([FromBody] UserDto userCreate) 
+        {
+            if (userCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = _userRepository.GetUsers().FirstOrDefault(u => string.Equals(u.Email, userCreate.Email, StringComparison.OrdinalIgnoreCase));
+            if (user != null)
+            {
+                ModelState.AddModelError("", "User already exists!");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userToCreate = _mapper.Map<User>(userCreate);
+
+            if (!_userRepository.CreateUser(userToCreate))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving the user {userToCreate.Email}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
         }
 
         //// POST api/Users

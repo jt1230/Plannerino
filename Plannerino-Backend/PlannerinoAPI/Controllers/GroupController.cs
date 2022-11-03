@@ -19,7 +19,7 @@ namespace PlannerinoAPI.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Groups
+        // GET: api/Group
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Group>))]
         public IActionResult GetGroups()
@@ -30,7 +30,7 @@ namespace PlannerinoAPI.Controllers
             return Ok(group);
         }
 
-        // GET: api/Groups/5
+        // GET: api/Group/5
         [HttpGet("{id:int}")]
         [ProducesResponseType(200, Type = typeof(Group))]
         [ProducesResponseType(400)]
@@ -47,6 +47,54 @@ namespace PlannerinoAPI.Controllers
             return Ok(group);
         }
 
+        // GET api/Group/2/users
+        [HttpGet("{groupId:int}/users")]
+        [ProducesResponseType(200, Type = typeof(Group))]
+        [ProducesResponseType(400)]
+        public IActionResult GetUsersFromAGroup(int groupId)
+        {
+            if (!_groupRepository.GroupExists(groupId))
+            {
+                return NotFound();
+            }
+
+            var user = _mapper.Map<List<UserDto>>(_groupRepository.GetUsersFromAGroup(groupId));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(user);
+        }
+
+        // POST: api/Group
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(Group))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateCategory([FromBody] GroupDto groupCreate)
+        {
+            if (groupCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            var group = _groupRepository.GetGroups().FirstOrDefault(u => string.Equals(u.Name, groupCreate.Name, StringComparison.OrdinalIgnoreCase));
+            if (group != null)
+            {
+                ModelState.AddModelError("", "Group already exists!");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            
+            var groupToCreate = _mapper.Map<Group>(groupCreate);
+            
+            if (!_groupRepository.CreateGroup(groupToCreate))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving the group {groupToCreate.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
 
         //// POST api/Groups
         //[HttpPost]
