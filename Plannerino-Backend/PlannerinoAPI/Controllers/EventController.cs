@@ -53,33 +53,20 @@ namespace PlannerinoAPI.Controllers
         [HttpGet("{type}")]
         [ProducesResponseType(200, Type = typeof(Event))]
         [ProducesResponseType(400)]
-        public IActionResult GetEventByType(string type)
+        public IActionResult GetEventsByType(string type)
         {
             
-            var eventType = _mapper.Map<EventDto>(_eventRepository.GetEventByType(type));
+            var eventType = _mapper.Map<List<EventDto>>(_eventRepository.GetEventsByType(type));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(eventType);
-        }
-
-        // GET: api/Event/userId/user
-        [HttpGet("{userId:int}/user")]
-        [ProducesResponseType(200, Type = typeof(Event))]
-        [ProducesResponseType(400)]
-        public IActionResult GetEventByUser(int userId)
-        {
-
-            var userEvent = _mapper.Map<EventDto>(_eventRepository.GetEventByUser(userId));
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            return Ok(userEvent);
         }
 
         // POST: api/Event
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Event))]
         [ProducesResponseType(400)]
-        public IActionResult CreateCategory([FromQuery] int userId, [FromBody] EventDto eventCreate)
+        public IActionResult CreateEvent([FromQuery] int userId, [FromBody] EventDto eventCreate)
         {
             if (eventCreate == null)
             {
@@ -89,7 +76,7 @@ namespace PlannerinoAPI.Controllers
             var userEvent = _eventRepository.GetEvents().FirstOrDefault(u => string.Equals(u.Title, eventCreate.Title, StringComparison.OrdinalIgnoreCase));
             if (userEvent != null)
             {
-                ModelState.AddModelError("", "Group already exists!");
+                ModelState.AddModelError("", "Event already exists!");
                 return StatusCode(404, ModelState);
             }
 
@@ -108,47 +95,64 @@ namespace PlannerinoAPI.Controllers
 
             return Ok("Successfully created");
         }
-        
-        //// POST api/Groups
-        //[HttpPost]
-        //public async Task<IActionResult> Post(Group group)
-        //{
-        //    await dbContext.Groups.AddAsync(group);
-        //    await dbContext.SaveChangesAsync();
-        //    return Ok(group);
-        //}
 
-        //PUT api/Groups/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Put(int id, Group groupToBeUpdated)
-        //{
-        //    var findGroup = await dbContext.Groups.FindAsync(id);
+        //PUT: api/Event
+        [HttpPut("{eventId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateEvent(int eventId, [FromBody] EventDto updatedEvent)
+        {
+            if (updatedEvent == null || eventId != updatedEvent.Id)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    if (findGroup != null)
-        //    {
-        //        findGroup.Name = groupToBeUpdated.Name;
-        //        findGroup.Description = groupToBeUpdated.Description;
-        //        findGroup.Users = groupToBeUpdated.Users;
+            if (!_eventRepository.EventExists(eventId))
+            {
+                return NotFound();
+            }
 
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(findGroup);
-        //    }
-        //    return NotFound();
-        //}
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //// DELETE api/Groups/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var group = await dbContext.Groups.FindAsync(id);
+            var eventToUpdate = _mapper.Map<Event>(updatedEvent);
 
-        //    if (group != null)
-        //    {
-        //        dbContext.Remove(group);
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(group);
-        //    }
-        //    return NotFound();
-        //}
+            if (!_eventRepository.UpdateEvent(eventToUpdate))
+            {
+                ModelState.AddModelError("", "Something went wrong updating the event");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully updated");
+            
+        }
+
+        //DELETE: api/Event
+        [HttpDelete("{eventId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteEvent(int eventId)
+        {
+            if (!_eventRepository.EventExists(eventId))
+            {
+                return NotFound();
+            }
+
+            var eventToDelete = _eventRepository.GetEvent(eventId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_eventRepository.DeleteEvent(eventToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the event");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully deleted");
+        }
+
+
     }
 }

@@ -6,9 +6,10 @@ namespace PlannerinoAPI.Interfaces
     {
         ICollection<UserTask> GetUserTasks();
         UserTask GetUserTask(int id);
-        UserTask GetUserTaskByCategory(string category);
-        UserTask GetUserTaskByUser(int userId);
+        ICollection<UserTask> GetUserTasksByCategory(string category);
+        bool CreateUserTask(UserTask userTask);
+        bool UpdateUserTask(UserTask userTask);
+        bool DeleteUserTask(UserTask userTask);
         bool UserTaskExists(int id);
-        
     }
 }

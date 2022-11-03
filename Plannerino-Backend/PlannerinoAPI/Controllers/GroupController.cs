@@ -11,11 +11,13 @@ namespace PlannerinoAPI.Controllers
     public class GroupController : ControllerBase
     {
         private readonly IGroupRepository _groupRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public GroupController(IGroupRepository groupRepository, IMapper mapper)
+        public GroupController(IGroupRepository groupRepository, IUserRepository userRepository, IMapper mapper)
         {
             _groupRepository = groupRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -68,7 +70,7 @@ namespace PlannerinoAPI.Controllers
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Group))]
         [ProducesResponseType(400)]
-        public IActionResult CreateCategory([FromBody] GroupDto groupCreate)
+        public IActionResult CreateGroup([FromQuery] int userId, [FromBody] GroupDto groupCreate)
         {
             if (groupCreate == null)
             {
@@ -87,7 +89,7 @@ namespace PlannerinoAPI.Controllers
             
             var groupToCreate = _mapper.Map<Group>(groupCreate);
             
-            if (!_groupRepository.CreateGroup(groupToCreate))
+            if (!_groupRepository.CreateGroup(userId, groupToCreate))
             {
                 ModelState.AddModelError("", $"Something went wrong saving the group {groupToCreate.Name}");
                 return StatusCode(500, ModelState);
@@ -96,46 +98,61 @@ namespace PlannerinoAPI.Controllers
             return Ok("Successfully created");
         }
 
-        //// POST api/Groups
-        //[HttpPost]
-        //public async Task<IActionResult> Post(Group group)
-        //{
-        //    await dbContext.Groups.AddAsync(group);
-        //    await dbContext.SaveChangesAsync();
-        //    return Ok(group);
-        //}
+        //PUT: api/Group
+        [HttpPut("{groupId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateGroup(int groupId, [FromBody] GroupDto updatedGroup)
+        {
+            if (updatedGroup == null || groupId != updatedGroup.Id)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //PUT api/Groups/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Put(int id, Group groupToBeUpdated)
-        //{
-        //    var findGroup = await dbContext.Groups.FindAsync(id);
+            if (!_groupRepository.GroupExists(groupId))
+            {
+                return NotFound();
+            }
 
-        //    if (findGroup != null)
-        //    {
-        //        findGroup.Name = groupToBeUpdated.Name;
-        //        findGroup.Description = groupToBeUpdated.Description;
-        //        findGroup.Users = groupToBeUpdated.Users;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(findGroup);
-        //    }
-        //    return NotFound();
-        //}
+            var groupToUpdate = _mapper.Map<Group>(updatedGroup);
 
-        //// DELETE api/Groups/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var group = await dbContext.Groups.FindAsync(id);
+            if (!_groupRepository.UpdateGroup(groupToUpdate))
+            {
+                ModelState.AddModelError("", "Something went wrong updating the group");
+                return StatusCode(500, ModelState);
+            }
 
-        //    if (group != null)
-        //    {
-        //        dbContext.Remove(group);
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(group);
-        //    }
-        //    return NotFound();
-        //}
+            return Ok("Successfully updated");
+
+        }
+
+        //DELETE: api/Group
+        [HttpDelete("{groupId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteGroup(int groupId)
+        {
+            if (!_groupRepository.GroupExists(groupId))
+            {
+                return NotFound();
+            }
+
+            var eventToDelete = _groupRepository.GetGroup(groupId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_groupRepository.DeleteGroup(eventToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the group");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully deleted");
+        }
     }
 }

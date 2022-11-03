@@ -12,7 +12,9 @@ namespace PlannerinoAPI.Interfaces
         ICollection<Event> GetEventsFromAUser(int userId);
         ICollection<UserTask> GetTasksFromAUser(int userId);
         bool UserExists(int id);
-        bool CreateUser(User user);
+        bool CreateUser(int groupId, User user);
+        bool UpdateUser(User user);
+        bool DeleteUser(User user);
         bool Save();
 
     }

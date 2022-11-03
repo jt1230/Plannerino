@@ -81,7 +81,7 @@ namespace PlannerinoAPI.Controllers
             {
                 return NotFound();
             }
-            
+
             var user = _mapper.Map<List<GroupDto>>(_userRepository.GetGroupsFromAUser(userId));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -122,11 +122,11 @@ namespace PlannerinoAPI.Controllers
             return Ok(user);
         }
 
-        // POST: api/Users
+        // POST: api/User
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(User))]
         [ProducesResponseType(400)]
-        public IActionResult CreateCategory([FromBody] UserDto userCreate) 
+        public IActionResult CreateCategory([FromQuery] int groupId, [FromBody] UserDto userCreate)
         {
             if (userCreate == null)
             {
@@ -145,7 +145,7 @@ namespace PlannerinoAPI.Controllers
 
             var userToCreate = _mapper.Map<User>(userCreate);
 
-            if (!_userRepository.CreateUser(userToCreate))
+            if (!_userRepository.CreateUser(groupId, userToCreate))
             {
                 ModelState.AddModelError("", $"Something went wrong saving the user {userToCreate.Email}");
                 return StatusCode(500, ModelState);
@@ -154,52 +154,60 @@ namespace PlannerinoAPI.Controllers
             return Ok("Successfully created");
         }
 
-        //// POST api/Users
-        //[HttpPost]
-        //public async Task<IActionResult> Post(User user)
-        //{
-        //    //user.Events = new List<Event>();
-        //    //user.Groups = new List<Group>();
-        //    //user.Tasks = new List<UserTask>();
+        //PUT: api/User
+        [HttpPut("{userId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateUser(int userId, [FromBody] UserDto updatedUser) 
+        {
+            if (updatedUser == null || userId != updatedUser.Id)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    await dbContext.Users.AddAsync(user);
-        //    await dbContext.SaveChangesAsync();
-        //    return Ok(user);
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
 
-        //}
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //// PUT api/Users/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Put(int id, User userToBeUpdated)
-        //{
-        //    var findUser = await dbContext.Users.FindAsync(id);
+            var userToUpdate = _mapper.Map<User>(updatedUser);
 
-        //    if(findUser != null)
-        //    {
-        //        findUser.FirstName = userToBeUpdated.FirstName;
-        //        findUser.LastName = userToBeUpdated.LastName;
-        //        findUser.Email = userToBeUpdated.Email;
-        //        findUser.Password = userToBeUpdated.Password;
+            if (!_userRepository.UpdateUser(userToUpdate))
+            {
+                ModelState.AddModelError("", "Something went wrong updating the user");
+                return StatusCode(500, ModelState);
+            }
 
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(findUser);
-        //    }
-        //    return NotFound();
-        //}
+            return Ok("Successfully updated");
+        }
 
-        //// DELETE api/Users/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var user = await dbContext.Users.FindAsync(id);
+        //DELETE: api/User
+        [HttpDelete("{userId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteUser(int userId)
+        {
+            if (!_userRepository.UserExists(userId))
+            {
+                return NotFound();
+            }
 
-        //    if (user != null)
-        //    {
-        //        dbContext.Remove(user);
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(user);
-        //    }
-        //    return NotFound();
-        //}
+            var userToDelete = _userRepository.GetUser(userId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_userRepository.DeleteUser(userToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the user");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully deleted");
+        }
     }
 }

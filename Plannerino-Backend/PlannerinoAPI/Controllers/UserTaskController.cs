@@ -11,11 +11,13 @@ namespace PlannerinoAPI.Controllers
     public class UserTaskController : ControllerBase
     {
         private readonly IUserTaskRepository _userTaskRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UserTaskController(IUserTaskRepository userTaskRepository, IMapper mapper)
+        public UserTaskController(IUserTaskRepository userTaskRepository, IUserRepository userRepository, IMapper mapper)
         {
             _userTaskRepository = userTaskRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -51,67 +53,103 @@ namespace PlannerinoAPI.Controllers
         [HttpGet("{category}")]
         [ProducesResponseType(200, Type = typeof(UserTask))]
         [ProducesResponseType(400)]
-        public IActionResult GetUserTaskByCategory(string category)
+        public IActionResult GetUserTasksByCategory(string category)
         {
-            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTaskByCategory(category));
+            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTasksByCategory(category));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userTask);
         }
 
-        // GET: api/UserTask/userId
-        [HttpGet("{userId:int}")]
-        [ProducesResponseType(200, Type = typeof(Event))]
+        // POST: api/UserTask
+        [HttpPost]
+        [ProducesResponseType(201, Type = typeof(Event))]
         [ProducesResponseType(400)]
-        public IActionResult GetUserTaskByUser(int userId)
+        public IActionResult CreateUserTask([FromQuery] int userId, [FromBody] UserTaskDto userTaskCreate)
         {
+            if (userTaskCreate == null)
+            {
+                return BadRequest(ModelState);
+            }
 
-            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTaskByUser(userId));
+            var userTask = _userTaskRepository.GetUserTasks().FirstOrDefault(u => string.Equals(u.Title, userTaskCreate.Title, StringComparison.OrdinalIgnoreCase));
+            if (userTask != null)
+            {
+                ModelState.AddModelError("", "Event already exists!");
+                return StatusCode(404, ModelState);
+            }
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            return Ok(userTask);
+            
+            var userTaskToCreate = _mapper.Map<UserTask>(userTaskCreate);
+
+            userTaskToCreate.User = _userRepository.GetUser(userId);
+
+            if (!_userTaskRepository.CreateUserTask(userTaskToCreate))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving the task {userTaskToCreate.Title}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
         }
 
-        //// POST api/Groups
-        //[HttpPost]
-        //public async Task<IActionResult> Post(Group group)
-        //{
-        //    await dbContext.Groups.AddAsync(group);
-        //    await dbContext.SaveChangesAsync();
-        //    return Ok(group);
-        //}
+        //PUT: api/UserTask
+        [HttpPut("{userTaskId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateUserTask(int userTaskId, [FromBody] UserTaskDto updatedUserTask)
+        {
+            if (updatedUserTask == null || userTaskId != updatedUserTask.Id)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //PUT api/Groups/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Put(int id, Group groupToBeUpdated)
-        //{
-        //    var findGroup = await dbContext.Groups.FindAsync(id);
+            if (!_userTaskRepository.UserTaskExists(userTaskId))
+            {
+                return NotFound();
+            }
 
-        //    if (findGroup != null)
-        //    {
-        //        findGroup.Name = groupToBeUpdated.Name;
-        //        findGroup.Description = groupToBeUpdated.Description;
-        //        findGroup.Users = groupToBeUpdated.Users;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(findGroup);
-        //    }
-        //    return NotFound();
-        //}
+            var userTaskToUpdate = _mapper.Map<UserTask>(updatedUserTask);
 
-        //// DELETE api/Groups/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var group = await dbContext.Groups.FindAsync(id);
+            if (!_userTaskRepository.UpdateUserTask(userTaskToUpdate))
+            {
+                ModelState.AddModelError("", "Something went wrong updating the task");
+                return StatusCode(500, ModelState);
+            }
 
-        //    if (group != null)
-        //    {
-        //        dbContext.Remove(group);
-        //        await dbContext.SaveChangesAsync();
-        //        return Ok(group);
-        //    }
-        //    return NotFound();
-        //}
+            return Ok("Successfully updated");
+        }
+
+        //DELETE: api/UserTask
+        [HttpDelete("{userTaskId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteUserTask(int userTaskId)
+        {
+            if (!_userTaskRepository.UserTaskExists(userTaskId))
+            {
+                return NotFound();
+            }
+
+            var userTaskToDelete = _userTaskRepository.GetUserTask(userTaskId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_userTaskRepository.DeleteUserTask(userTaskToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the task");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully deleted");
+        }
+
     }
 }

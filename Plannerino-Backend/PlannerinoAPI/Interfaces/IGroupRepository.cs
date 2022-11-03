@@ -8,7 +8,9 @@ namespace PlannerinoAPI.Interfaces
         Group GetGroup(int id);
         ICollection<User> GetUsersFromAGroup(int groupId);
         bool GroupExists(int id);
-        bool CreateGroup(Group group);
+        bool CreateGroup(int userId, Group group);
+        bool UpdateGroup(Group group);
+        bool DeleteGroup(Group group);
         bool Save();
 
     }
