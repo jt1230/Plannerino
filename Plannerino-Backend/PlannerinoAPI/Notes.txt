@@ -1,3 +1,0 @@
------------------------ MAYBE -----------------------
-*Models -> Event:
-- # of days, weeks, etc. (for the event), frequency
