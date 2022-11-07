@@ -17,7 +17,7 @@ import authState from "../atoms/authState"
 
 export default function Navbar() {
   const [auth, setAuth] = useRecoilState(authState);
-
+  
   const handleLogout = () => {
     setAuth(null);
   }
@@ -40,9 +40,9 @@ export default function Navbar() {
           <Avatar
             alt="Profile Pic"
             src="/static/dummyprofile.jpg"
-            sx={{ height: 150, width: 150 }}
+            sx={{ height: 100, width: 100 }}
           />
-          <Typography variant="h4" component="h4" mb="1em">
+          <Typography variant="h5" mb="1em">
             {auth.firstName} {auth.lastName}
           </Typography>
           <ButtonGroup variant="text" orientation="vertical" color="primary" >

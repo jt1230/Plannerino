@@ -151,7 +151,7 @@ namespace PlannerinoAPI.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return Ok("Successfully created");
+            return Ok("Successfully updated");
         }
 
         //PUT: api/User

@@ -21,6 +21,7 @@ namespace PlannerinoAPI.Repository
                 User = user,
                 Group = userGroupEntity
             };
+            //_context.ChangeTracker.Clear();
             _context.Add(userGroup);
             return Save();
         }

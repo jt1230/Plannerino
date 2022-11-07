@@ -12,7 +12,7 @@ export default function Timesheets() {
   return (
     <>  
       <Grid container spacing={2} height="100vh">
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Navbar />
         </Grid>
         <Grid item xs={8} display="flex" borderLeft={1}>

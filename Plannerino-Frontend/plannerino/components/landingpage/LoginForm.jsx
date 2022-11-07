@@ -27,7 +27,7 @@ export default function LoginForm() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const response = await fetch(`https://localhost:7063/api/Users/${data.get("email")}/${data.get("password")}`);
+    const response = await fetch(`https://localhost:7063/api/User/${data.get("email")}/${data.get("password")}`);
     if(response.ok){
       const data = await response.json();
       setAuth(data);
