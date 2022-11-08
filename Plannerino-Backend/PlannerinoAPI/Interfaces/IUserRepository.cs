@@ -6,7 +6,6 @@ namespace PlannerinoAPI.Interfaces
     {
         ICollection<User> GetUsers();
         User GetUser(int id);
-        User GetUserByEmail(string email);
         User GetUserByEmailAndPwd(string email, string pwd);
         ICollection<Group> GetGroupsFromAUser(int userId);
         ICollection<Event> GetEventsFromAUser(int userId);

@@ -1,11 +1,6 @@
-import Link from "next/link";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Navbar from "../Navbar";
+import Navbar from "components/Navbar";
 
 export default function Dashboard() {
 

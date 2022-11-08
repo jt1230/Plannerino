@@ -1,15 +1,13 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { loginUser } from "../../lib/auth";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import authState from "../../atoms/authState"
+import authState from "atoms/authState"
 
 export default function LoginForm() {
   const [auth, setAuth] = useRecoilState(authState);

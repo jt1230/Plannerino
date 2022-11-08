@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Navbar from "../Navbar";
+import Navbar from "components/Navbar";
 
 export default function Settings() {
 

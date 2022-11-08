@@ -1,10 +1,10 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import LoginForm from "./LoginForm";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
+import LoginForm from "components/landingpage/LoginForm";
 
 export default function LandingPage() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);

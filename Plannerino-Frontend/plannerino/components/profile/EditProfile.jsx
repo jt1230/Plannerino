@@ -1,13 +1,8 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import { useRecoilState } from "recoil";
-import authState from "../../atoms/authState"
+import authState from "atoms/authState"
 
 export default function EditProfile({setIsEditing}) {
     const [auth, setAuth] = useRecoilState(authState);

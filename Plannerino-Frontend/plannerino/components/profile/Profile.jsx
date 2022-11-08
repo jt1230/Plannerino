@@ -1,24 +1,31 @@
-import Link from "next/link";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Navbar from "../Navbar";
-import authState from "../../atoms/authState";
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import EditIcon from '@mui/icons-material/Edit';
 import Router from "next/router";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
-import EditIcon from '@mui/icons-material/Edit';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import EditProfile from "./EditProfile";
-import Groups from "./Groups";
+import authState from "atoms/authState";
+import Navbar from "components/Navbar";
+import EditProfile from "components/profile/EditProfile";
+import Groups from "components/profile/Groups";
 
 export default function Profile() {
   const [auth, setAuth] = useRecoilState(authState);
   const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("/static/dummyprofile.jpg");
+
+  useEffect(() => {
+    if (profileImage) {
+      setImageUrl(URL.createObjectURL(profileImage));
+    }
+  }, [profileImage]);
 
   if(auth == null){
     Router.push('/');
@@ -32,16 +39,17 @@ export default function Profile() {
         </Grid>
         <Grid item xs={8} display="flex" flexDirection="column" borderLeft={1}>
           <Typography variant="h4" gutterBottom>
-            ProfilePage
+            My Profile
           </Typography>
           <Grid container display="flex" height="100%">
             <Grid item xs={4} sx={{ border: 1 }} display="flex" flexDirection="column" alignItems="center" textAlign={isEditing ? "center" : "left"}>
               <Avatar
                 alt="Profile Pic"
-                src="/static/dummyprofile.jpg"
+                src={imageUrl}
                 sx={{ height: 200, width: 200, my: "1rem" }}
               />
-              <Button startIcon={<AddAPhotoIcon aria-label="change photo" />} variant="contained" sx={{ width: "65%" }}>
+              <Button startIcon={<AddAPhotoIcon aria-label="change photo" />} variant="contained" sx={{ width: "65%" }} component="label">
+                <input hidden accept="image/*" multiple type="file" id="profile-image" onChange={e => setProfileImage(e.target.files[0])}/>
                 Change Photo
               </Button>
               {(isEditing ? <EditProfile setIsEditing={setIsEditing}/> : <Box sx={{ width: "65%" }}>
@@ -63,7 +71,7 @@ export default function Profile() {
               </Box>)}
             </Grid>
             <Grid container item xs={8} direction="column" >
-              <Grid item xs={8} sx={{ border: 1 }} borderBottom={1}>
+              <Grid item xs={8} sx={{ border: 1 }} >
                 Expenses
               </Grid>
               <Grid item xs={4} sx={{ border: 1 }} >

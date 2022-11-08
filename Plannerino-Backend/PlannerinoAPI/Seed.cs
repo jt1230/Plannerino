@@ -23,6 +23,25 @@ namespace PlannerinoAPI
                 {
                     Name = "The Doe's",
                     Description = "Family planning for the Doe family",
+                    Count = 4,
+                };
+
+                var group2 = new Group()
+                {
+                    Name = "SKK",
+                    Description = "For me and my girlies",
+                };
+
+                var group3 = new Group()
+                {
+                    Name = "Swifties",
+                    Description = "Meet me at midnight",
+                };
+
+                var group4 = new Group()
+                {
+                    Name = "AWs",
+                    Description = "When can we meet for AWs?",
                 };
 
                 var john = new User()
@@ -84,6 +103,21 @@ namespace PlannerinoAPI
                     {
                         User = jane,
                         Group = group1,
+                    },
+                    new UserGroup()
+                    {
+                        User = jane,
+                        Group = group2,
+                    },
+                    new UserGroup()
+                    {
+                        User = mary,
+                        Group = group3,
+                    },
+                    new UserGroup()
+                    {
+                        User = joseph,
+                        Group = group4,
                     },
                     new UserGroup()
                     {

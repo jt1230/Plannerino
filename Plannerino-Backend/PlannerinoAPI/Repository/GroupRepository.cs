@@ -22,7 +22,6 @@ namespace PlannerinoAPI.Repository
                 User = userGroupEntity,
                 Group = group
             };
-            _context.Add(userGroup);
             return Save();
         }
         public ICollection<Group> GetGroups()

@@ -47,18 +47,6 @@ namespace PlannerinoAPI.Controllers
             return Ok(user);
         }
 
-        // GET api/Users/mail
-        [HttpGet("{mail}")]
-        [ProducesResponseType(200, Type = typeof(User))]
-        [ProducesResponseType(400)]
-        public IActionResult GetUserByMail(string mail)
-        {
-            var user = _mapper.Map<UserDto>(_userRepository.GetUserByEmail(mail));
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            return Ok(user);
-        }
-
         // GET api/Users/mail/pwd
         [HttpGet("{mail}/{pwd}")]
         [ProducesResponseType(200, Type = typeof(User))]
