@@ -22,7 +22,7 @@ namespace PlannerinoAPI
                 var group1 = new Group()
                 {
                     Name = "The Doe's",
-                    Description = "Family planning for the Doe family"
+                    Description = "Family planning for the Doe family",
                 };
 
                 var john = new User()

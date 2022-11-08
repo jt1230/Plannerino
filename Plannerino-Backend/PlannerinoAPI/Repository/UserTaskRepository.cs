@@ -26,7 +26,7 @@ namespace PlannerinoAPI.Repository
 
         public UserTask GetUserTask(int id)
         {
-            return _context.Tasks.First(ut => ut.Id == id);
+            return _context.Tasks.FirstOrDefault(ut => ut.Id == id);
         }
         
         public ICollection<UserTask> GetUserTasksByCategory(string category)

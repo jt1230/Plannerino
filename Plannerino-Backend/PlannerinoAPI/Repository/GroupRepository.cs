@@ -32,7 +32,12 @@ namespace PlannerinoAPI.Repository
 
         public Group GetGroup(int id)
         {
-            return _context.Groups.First(g => g.Id == id);
+            var group = _context.Groups.FirstOrDefault(g => g.Id == id);
+            var count = _context.UserGroups.Where(ug => ug.Group.Id == id).Count();
+            group.Count = count;
+            _context.SaveChanges();
+            //return _context.Groups.FirstOrDefault(g => g.Id == id);
+            return group;
         }
         public ICollection<User> GetUsersFromAGroup(int groupId)
         {

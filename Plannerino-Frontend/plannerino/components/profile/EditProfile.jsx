@@ -50,6 +50,7 @@ export default function EditProfile({setIsEditing}) {
                 />
                 <TextField
                     required
+                    margin="dense"
                     id="lastName"
                     label="Last Name"
                     name="lastName"
@@ -70,6 +71,7 @@ export default function EditProfile({setIsEditing}) {
                 />
                 <TextField
                     required
+                    margin="dense"
                     name="password"
                     label="Password"
                     placeholder="*********"

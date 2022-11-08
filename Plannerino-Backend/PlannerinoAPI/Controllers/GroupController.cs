@@ -11,13 +11,11 @@ namespace PlannerinoAPI.Controllers
     public class GroupController : ControllerBase
     {
         private readonly IGroupRepository _groupRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public GroupController(IGroupRepository groupRepository, IUserRepository userRepository, IMapper mapper)
+        public GroupController(IGroupRepository groupRepository, IMapper mapper)
         {
             _groupRepository = groupRepository;
-            _userRepository = userRepository;
             _mapper = mapper;
         }
 
@@ -43,7 +41,7 @@ namespace PlannerinoAPI.Controllers
                 return NotFound();
             }
             
-            var group = _mapper.Map<UserDto>(_groupRepository.GetGroup(id));
+            var group = _mapper.Map<GroupDto>(_groupRepository.GetGroup(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(group);

@@ -14,6 +14,7 @@ import { useRecoilState } from "recoil";
 import EditIcon from '@mui/icons-material/Edit';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import EditProfile from "./EditProfile";
+import Groups from "./Groups";
 
 export default function Profile() {
   const [auth, setAuth] = useRecoilState(authState);
@@ -30,7 +31,7 @@ export default function Profile() {
           <Navbar />
         </Grid>
         <Grid item xs={8} display="flex" flexDirection="column" borderLeft={1}>
-          <Typography variant="h3" component="h1" gutterBottom>
+          <Typography variant="h4" gutterBottom>
             ProfilePage
           </Typography>
           <Grid container display="flex" height="100%">
@@ -61,8 +62,13 @@ export default function Profile() {
                 </Button>
               </Box>)}
             </Grid>
-            <Grid item xs={8} sx={{ border: 1 }}>
-              Expenses, group
+            <Grid container item xs={8} direction="column" >
+              <Grid item xs={8} sx={{ border: 1 }} borderBottom={1}>
+                Expenses
+              </Grid>
+              <Grid item xs={4} sx={{ border: 1 }} >
+                <Groups />
+            </Grid>
             </Grid>
           </Grid>
         </Grid>

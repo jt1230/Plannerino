@@ -14,7 +14,7 @@ namespace PlannerinoAPI.Repository
         }
         public bool CreateUser(int groupId, User user)
         {
-            var userGroupEntity = _context.Groups.First(u => u.Id == groupId);
+            var userGroupEntity = _context.Groups.FirstOrDefault(u => u.Id == groupId);
 
             var userGroup = new UserGroup()
             {
@@ -33,17 +33,17 @@ namespace PlannerinoAPI.Repository
 
         public User GetUser(int id)
         {
-            return _context.Users.First(u => u.Id == id);
+            return _context.Users.FirstOrDefault(u => u.Id == id);
         }
 
         public User GetUserByEmail(string email)
         {
-            return _context.Users.First(u => u.Email == email);
+            return _context.Users.FirstOrDefault(u => u.Email == email);
         }
 
         public User GetUserByEmailAndPwd(string email, string pwd)
         {
-            return _context.Users.First(u => u.Email == email && u.Password == pwd);
+            return _context.Users.FirstOrDefault(u => u.Email == email && u.Password == pwd);
         }
 
         public ICollection<Group> GetGroupsFromAUser(int userId)
