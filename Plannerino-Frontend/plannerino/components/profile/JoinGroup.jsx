@@ -1,101 +1,79 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { useRecoilState } from "recoil";
-import authState from "atoms/authState"
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { useRecoilValue } from "recoil";
+import authState from "atoms/authState";
 
-export default function JoinGroup({setIsCreating}) {
-    const [auth, setAuth] = useRecoilState(authState);
+export default function JoinGroup({ setIsJoining}) {
+  const auth= useRecoilValue(authState);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
 
-        let putUser = {...auth};
-        putUser.firstName = data.get("firstName");
-        putUser.lastName = data.get("lastName");
-        putUser.password = data.get("password");;
-        putUser.email = data.get("email");;
-        console.log(putUser);
+    let postGroup = {name:"", description:""};
+    postGroup.name = data.get("name");
+    postGroup.description = data.get("description");
 
-        await fetch(`https://localhost:7063/api/User/${putUser.id}`, {
-        method: "PUT",
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify(putUser)
-        })
+    await fetch(`https://localhost:7063/api/Group?userId=${auth.id}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(postGroup),
+    });
+    setIsJoining(false);
+  };
 
-        const response = await fetch(`https://localhost:7063/api/User/${data.get("email")}`);
-        const updatedData = await response.json();
-        setAuth(updatedData);
-        setIsEditing(false);
-    };
-
-    return (
-        <>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }} display="flex" flexDirection="column" alignItems="center" > 
-                 <TextField
-                    required
-                    margin="dense"
-                    id="firstName"
-                    label="First Name"
-                    name="firstName"
-                    placeholder={auth.firstName}
-                    autoFocus
-                    size = "small"
-                />
-                <TextField
-                    required
-                    margin="dense"
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    placeholder={auth.lastName}
-                    autoFocus
-                    size="small"
-
-                />
-                <TextField
-                    required
-                    margin="dense"
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    placeholder="name@mail.com"
-                    autoFocus
-                    size="small"
-                />
-                <TextField
-                    required
-                    margin="dense"
-                    name="password"
-                    label="Password"
-                    placeholder="*********"
-                    type="password"
-                    id="password"
-                    size="small"
-                />
-                <Box display="flex" gap={3} width="100%">
-
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: "1rem", bgcolor: "#483434" }}
-                >
-                    Save
-                </Button>
-                <Button
-                    type="button"
-                    fullWidth
-                    variant="outlined"
-                    sx={{ mt: "1rem", color:"#483434", borderColor:"#483434" }}
-                    onClick={() => setIsEditing(false)}
-                >
-                    Cancel
-                </Button>
-                </Box>
-             </Box> 
-
-        </>
-    );
+  return (
+    <>
+	  <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{position: "absolute", left: 0, right: 0, mx: "auto", top:"25%", backgroundColor: "white", zIndex: 100, height: "50%", width: "25%", border: 4}}>
+        <Typography>Create a Group</Typography>
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          sx={{ mt: 1 }}
+          display="flex"
+          flexDirection="column"
+        >
+          <TextField
+            required
+			margin="dense"
+            id="name"
+            label="Name"
+            name="name"
+            autoFocus
+            size="small"
+          />
+          <TextField
+            required
+			margin="dense"
+            id="description"
+            label="Description"
+            name="description"
+            autoFocus
+            multiline
+          />
+          <Box display="flex" gap={3} width="100%">
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+			  size="small"
+              sx={{ mt: "1rem", bgcolor: "#483434" }}
+            >
+              Create
+            </Button>
+            <Button
+              type="button"
+              fullWidth
+              variant="outlined"
+			  size="small"
+              sx={{ mt: "1rem", color: "#483434", borderColor: "#483434" }}
+              onClick={() => setIsJoining(false)}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </>
+  );
 }

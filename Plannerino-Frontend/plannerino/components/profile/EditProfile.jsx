@@ -35,6 +35,7 @@ export default function EditProfile({setIsEditing}) {
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }} display="flex" flexDirection="column" alignItems="center" > 
                  <TextField
                     required
+                    variant="filled"
                     margin="dense"
                     id="firstName"
                     label="First Name"
@@ -45,6 +46,7 @@ export default function EditProfile({setIsEditing}) {
                 />
                 <TextField
                     required
+                    variant="filled"
                     margin="dense"
                     id="lastName"
                     label="Last Name"
@@ -56,6 +58,7 @@ export default function EditProfile({setIsEditing}) {
                 />
                 <TextField
                     required
+                    variant="filled"
                     margin="dense"
                     id="email"
                     label="Email Address"
@@ -66,6 +69,7 @@ export default function EditProfile({setIsEditing}) {
                 />
                 <TextField
                     required
+                    variant="filled"
                     margin="dense"
                     name="password"
                     label="Password"

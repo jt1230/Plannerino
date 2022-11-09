@@ -39,7 +39,6 @@ export default function CreateGroup({ setIsCreating }) {
             id="name"
             label="Name"
             name="name"
-            placeholder="Group Name"
             autoFocus
             size="small"
           />
@@ -49,15 +48,15 @@ export default function CreateGroup({ setIsCreating }) {
             id="description"
             label="Description"
             name="description"
-            placeholder="Description of the group"
             autoFocus
-            size="small"
+            multiline
           />
           <Box display="flex" gap={3} width="100%">
             <Button
               type="submit"
               fullWidth
               variant="contained"
+			  size="small"
               sx={{ mt: "1rem", bgcolor: "#483434" }}
             >
               Create
@@ -66,6 +65,7 @@ export default function CreateGroup({ setIsCreating }) {
               type="button"
               fullWidth
               variant="outlined"
+			  size="small"
               sx={{ mt: "1rem", color: "#483434", borderColor: "#483434" }}
               onClick={() => setIsCreating(false)}
             >
