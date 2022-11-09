@@ -44,6 +44,12 @@ namespace PlannerinoAPI
                     Description = "When can we meet for AWs?",
                 };
 
+                var group5 = new Group()
+                {
+                    Name = "Horror Nights",
+                    Description = "Movie nights, when?",
+                };
+
                 var john = new User()
                 {
                     FirstName = "John",
@@ -111,13 +117,18 @@ namespace PlannerinoAPI
                     },
                     new UserGroup()
                     {
-                        User = mary,
+                        User = jane,
                         Group = group3,
                     },
                     new UserGroup()
                     {
-                        User = joseph,
+                        User = jane,
                         Group = group4,
+                    },
+                    new UserGroup()
+                    {
+                        User = jane,
+                        Group = group5,
                     },
                     new UserGroup()
                     {

@@ -33,7 +33,7 @@ export default function Profile() {
   else
   return (
     <>
-      <Grid container spacing={2} height="100vh">
+      <Grid container spacing={2} height="100vh" position="static">
         <Grid item xs={3}>
           <Navbar />
         </Grid>
