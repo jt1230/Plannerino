@@ -114,7 +114,7 @@ namespace PlannerinoAPI.Controllers
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(User))]
         [ProducesResponseType(400)]
-        public IActionResult CreateCategory([FromQuery] int groupId, [FromBody] UserDto userCreate)
+        public IActionResult CreateCategory([FromBody] UserDto userCreate)
         {
             if (userCreate == null)
             {
@@ -133,7 +133,7 @@ namespace PlannerinoAPI.Controllers
 
             var userToCreate = _mapper.Map<User>(userCreate);
 
-            if (!_userRepository.CreateUser(groupId, userToCreate))
+            if (!_userRepository.CreateUser(userToCreate))
             {
                 ModelState.AddModelError("", $"Something went wrong saving the user {userToCreate.Email}");
                 return StatusCode(500, ModelState);

@@ -1,15 +1,13 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
+import {Box, Button, Grid, TextField, Typography} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState"
+import SignUpForm from "components/landingpage/SignUpForm";
 
 export default function LoginForm() {
+  const [isCreating, setIsCreating] = useState(false);
   const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
@@ -34,9 +32,10 @@ export default function LoginForm() {
       alert("Login failed");
     }
   };
-
+  
   return (
     <>
+      {isCreating ? <SignUpForm setIsCreating={setIsCreating} /> : null}  
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -90,10 +89,11 @@ export default function LoginForm() {
           <Grid item xs sx={{ height: 1.5, bgcolor: "text.secondary" }}></Grid>
         </Grid>
         <Button
-          type="submit"
+          type="button"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2, bgcolor: "#483434" }}
+          onClick={() => setIsCreating(true)}
         >
           Sign Up
         </Button>

@@ -25,6 +25,22 @@ namespace PlannerinoAPI.Repository
             _context.Add(userGroup);
             return Save();
         }
+
+        public bool CreateUserGroup(int userId, int groupId)
+        {
+            var userGroupEntity = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            var group = _context.Groups.FirstOrDefault(u => u.Id == groupId);
+
+            var userGroup = new UserGroup()
+            {
+                User = userGroupEntity,
+                Group = group
+            };
+            _context.Add(userGroup);
+            return Save();
+        }
+        
         public ICollection<Group> GetGroups()
         {
             return _context.Groups.OrderBy(g => g.Id).ToList();
@@ -65,6 +81,6 @@ namespace PlannerinoAPI.Repository
         {
             _context.Remove(group);
             return Save();
-        }
+        }  
     }    
 }

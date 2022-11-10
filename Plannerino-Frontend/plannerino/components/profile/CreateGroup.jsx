@@ -1,15 +1,15 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
 
 export default function CreateGroup({ setIsCreating }) {
-  const auth= useRecoilValue(authState);
+  const [auth, setAuth] = useRecoilState(authState);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    let postGroup = {name:"", description:""};
+    let postGroup = {name:"", description:"", count: 1};
     postGroup.name = data.get("name");
     postGroup.description = data.get("description");
 
@@ -18,7 +18,13 @@ export default function CreateGroup({ setIsCreating }) {
       headers: { "content-type": "application/json" },
       body: JSON.stringify(postGroup),
     });
+
+    const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
+    const updatedData = await response.json();
+    setAuth(updatedData);
+
     setIsCreating(false);
+    
   };
 
   return (

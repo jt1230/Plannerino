@@ -75,7 +75,7 @@ namespace PlannerinoAPI.Controllers
                 return BadRequest(ModelState);
             }
             
-            var group = _groupRepository.GetGroups().FirstOrDefault(u => string.Equals(u.Name, groupCreate.Name, StringComparison.OrdinalIgnoreCase));
+            var group = _groupRepository.GetGroups().FirstOrDefault(u => string.Equals(u.Id.ToString(), groupCreate.Id.ToString(), StringComparison.OrdinalIgnoreCase));
             if (group != null)
             {
                 ModelState.AddModelError("", "Group already exists!");
@@ -90,6 +90,34 @@ namespace PlannerinoAPI.Controllers
             if (!_groupRepository.CreateGroup(userId, groupToCreate))
             {
                 ModelState.AddModelError("", $"Something went wrong saving the group {groupToCreate.Name}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
+
+        // POST: api/Group
+        [HttpPost("UserGroup")]
+        [ProducesResponseType(201, Type = typeof(Group))]
+        [ProducesResponseType(400)]
+        public IActionResult CreateGroup([FromQuery] int userId, [FromQuery] int groupId)
+        {
+            var users = _mapper.Map<List<UserDto>>(_groupRepository.GetUsersFromAGroup(groupId));
+
+            var userExists = users.Any(u => u.Id == userId);
+            
+            if (userExists)
+            {
+                ModelState.AddModelError("", "User already exists in this group!");
+                return StatusCode(404, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_groupRepository.CreateUserGroup(userId, groupId))
+            {
+                ModelState.AddModelError("", $"Something went wrong saving the user {userId} to the group {groupId}");
                 return StatusCode(500, ModelState);
             }
 

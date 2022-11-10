@@ -12,16 +12,9 @@ namespace PlannerinoAPI.Repository
         {
             _context = context;
         }
-        public bool CreateUser(int groupId, User user)
+        public bool CreateUser(User user)
         {
-            var userGroupEntity = _context.Groups.FirstOrDefault(u => u.Id == groupId);
-
-            var userGroup = new UserGroup()
-            {
-                User = user,
-                Group = userGroupEntity!
-            };
-            _context.Add(userGroup);
+            _context.Add(user);
             return Save();
         }
 

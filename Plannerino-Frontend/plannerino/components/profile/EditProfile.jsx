@@ -1,6 +1,4 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { Box, Button, TextField } from "@mui/material";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState"
 
@@ -24,9 +22,9 @@ export default function EditProfile({setIsEditing}) {
         body: JSON.stringify(putUser)
         })
 
-        const response = await fetch(`https://localhost:7063/api/User/${data.get("email")}`);
-        const updatedData = await response.json();
-        setAuth(updatedData);
+        const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
+    const updatedData = await response.json();
+    setAuth(updatedData);
         setIsEditing(false);
     };
 
