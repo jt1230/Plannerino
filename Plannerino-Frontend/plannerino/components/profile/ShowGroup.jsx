@@ -36,7 +36,7 @@ export default function ShowGroup({ setShowInfo, group }) {
           zIndex: 100,
           height: "50%",
           width: "25%",
-          border: 4,
+          border: 1,
         }}
       >
         <IconButton
@@ -52,13 +52,16 @@ export default function ShowGroup({ setShowInfo, group }) {
           <CancelIcon />
         </IconButton>
         <Typography>{group.name}</Typography>
-		<Box display="flex"  width="100%" mt="1rem" ml="1rem" gap={2}>
+		<Box display="flex" flexWrap="wrap" overflow="auto" width="100%" mt="1rem" ml="1rem" gap={2} textAlign="center">
 
 		{groupMembers.map((member) => {
               return (
-                <Avatar container key={member.id} sx={{height:"4rem", width:"4rem"}}>
+                <Box> 
+                <Avatar container key={member.id} sx={{height:"4rem", width:"4rem", margin: 1}}>
                   {member.firstName}
                 </Avatar>
+                <Typography>{member.firstName} {member.lastName}</Typography>           
+                </Box>
               );
             })}
 		</Box>

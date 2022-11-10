@@ -1,14 +1,9 @@
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
+import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 import LoginForm from "components/landingpage/LoginForm";
 
 export default function LandingPage() {
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isActiveUser, setIsActiveUser] = useState(false);
   const router = useRouter();
   
   return (
@@ -53,6 +48,7 @@ export default function LandingPage() {
             Easy planning, saving you time and headaches.
           </Typography>
           <LoginForm />
+          
         </Box>
       </Container>
     </>
