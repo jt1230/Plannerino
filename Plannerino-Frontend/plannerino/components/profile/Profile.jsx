@@ -70,11 +70,11 @@ export default function Profile() {
                 </Button>
               </Box>)}
             </Grid>
-            <Grid container item xs={8} direction="column" >
-              <Grid item xs={8} sx={{ border: 1 }} >
+            <Grid container item xs={8} >
+              <Grid item xs={12} sx={{ height: "60%", border: 1 }} >
                 Expenses
               </Grid>
-              <Grid item xs={4} sx={{ border: 1 }} >
+              <Grid item xs={12} sx={{ height: "40%", border: 1 }} >
                 <Groups />
             </Grid>
             </Grid>

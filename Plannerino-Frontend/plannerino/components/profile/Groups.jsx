@@ -12,11 +12,12 @@ import JoinGroup from "components/profile/JoinGroup";
 import ShowGroup from "components/profile/ShowGroup";
 
 export default function Groups() {
+  const PER_PAGE = 5;
   const auth = useRecoilValue(authState);
   const [isDisabled, setIsDisabled] = useState(true);
   const [groupList, setGroupList] = useRecoilState(groupssState);
   const [start, setStart] = useState(0);
-  const [end, setEnd] = useState(start + 3);
+  const [end, setEnd] = useState(start + PER_PAGE);
   const [showInfo, setShowInfo] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -34,22 +35,22 @@ export default function Groups() {
 
     if (start == 0) setIsDisabled(true);
     else setIsDisabled(false);
-  }, [auth, start]);
+  }, [auth, start, groupList]);
 
   const handleBackClick = () => {
-    if (start > 0 && end > 3) {
-      setStart((start) => start - 3);
-      setEnd((end) => end - 3);
+    if (start > 0 && end > PER_PAGE) {
+      setStart((start) => start - PER_PAGE);
+      setEnd((end) => end - PER_PAGE);
     } else {
       setStart(0);
-      setEnd(start + 3);
+      setEnd(start + PER_PAGE);
     }
   };
 
   const handleNextClick = () => {
-    if (end < groupList.length && end >= 3) {
-      setStart((start) => start + 3);
-      setEnd((end) => end + 3);
+    if (end < groupList.length && end >= PER_PAGE) {
+      setStart((start) => start + PER_PAGE);
+      setEnd((end) => end + PER_PAGE);
     }
   };
 
@@ -88,7 +89,7 @@ export default function Groups() {
               Create Group
             </Button>
           </Grid>
-          <Grid container item xs={11} margin="1rem" borderBottom={1}>
+          <Grid container item xs={11} mx="1rem" mt="1rem" borderBottom={1}>
             <Typography
               variant="subtitles2"
               pb={1}
@@ -139,7 +140,7 @@ export default function Groups() {
             })}
           </Grid>
         </Grid>
-        <Box display="flex" justifyContent="flex-end" mr="1rem">
+        <Box display="flex" justifyContent="flex-end" mr="1rem" mb="1rem"  >
           <IconButton
             variant="text"
             size="small"
