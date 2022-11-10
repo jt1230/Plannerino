@@ -12,6 +12,7 @@ namespace PlannerinoAPI.Interfaces
         bool CreateUserGroup(int userId, int groupId);
         bool UpdateGroup(Group group);
         bool DeleteGroup(Group group);
+        bool DeleteUserGroup(int userId, int groupId);
         bool Save();
 
     }

@@ -97,7 +97,7 @@ namespace PlannerinoAPI.Controllers
         }
 
         // POST: api/Group
-        [HttpPost("UserGroup")]
+        [HttpPost("userGroup")]
         [ProducesResponseType(201, Type = typeof(Group))]
         [ProducesResponseType(400)]
         public IActionResult CreateGroup([FromQuery] int userId, [FromQuery] int groupId)
@@ -168,14 +168,37 @@ namespace PlannerinoAPI.Controllers
                 return NotFound();
             }
 
-            var eventToDelete = _groupRepository.GetGroup(groupId);
+            var groupToDelete = _groupRepository.GetGroup(groupId);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!_groupRepository.DeleteGroup(eventToDelete))
+            if (!_groupRepository.DeleteGroup(groupToDelete))
             {
                 ModelState.AddModelError("", "Something went wrong deleting the group");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("Successfully deleted");
+        }
+
+        //DELETE: api/Group
+        [HttpDelete("{groupId:int}/usergroup")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteUserGroup(int groupId, int userId)
+        {
+            if (!_groupRepository.GroupExists(groupId))
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_groupRepository.DeleteUserGroup(userId, groupId))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting the group and user connection");
                 return StatusCode(500, ModelState);
             }
             return Ok("Successfully deleted");
