@@ -21,6 +21,7 @@ namespace PlannerinoAPI.Repository
                 User = userGroupEntity,
                 Group = group
             };
+            userGroup.Group.Count++;
             _context.Add(userGroup);
             return Save();
         }
@@ -36,6 +37,7 @@ namespace PlannerinoAPI.Repository
                 User = userGroupEntity,
                 Group = group
             };
+            userGroup.Group.Count++;
             _context.Add(userGroup);
             return Save();
         }
@@ -46,11 +48,7 @@ namespace PlannerinoAPI.Repository
 
         public Group GetGroup(int id)
         {
-            var group = _context.Groups.FirstOrDefault(g => g.Id == id);
-            var count = _context.UserGroups.Where(ug => ug.Group.Id == id).Count();
-            group.Count = count;
-            _context.SaveChanges();
-            return group;
+            return _context.Groups.FirstOrDefault(g => g.Id == id);
         }
         public ICollection<User> GetUsersFromAGroup(int groupId)
         {
@@ -84,6 +82,8 @@ namespace PlannerinoAPI.Repository
         {
             var userGroup = _context.UserGroups.FirstOrDefault(ug => ug.User.Id == userId && ug.Group.Id == groupId);
             _context.Remove(userGroup);
+            var group = _context.Groups.FirstOrDefault(g => g.Id == groupId);
+            group.Count--;
             return Save();
         }
     }

@@ -1,41 +1,60 @@
-import {Box, Button, Grid, TextField, Typography} from "@mui/material";
-import Link from "next/link";
+import {
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
-import authState from "atoms/authState"
+import authState from "atoms/authState";
 import SignUpForm from "components/landingpage/SignUpForm";
+import SnackbarAlert from "components/SnackbarAlert";
+import fetchUser from "features/users/fetch-user";
+import activeUser from "features/users/active-user";
 
 export default function LoginForm() {
+  const [open, setOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [auth, setAuth] = useRecoilState(authState);
   const router = useRouter();
 
-  useEffect(() => {
-    if(auth != null){
-      router.push("/user");
-    }
-    else router.push("/");
+  // useEffect(() => {
+  //   if (auth != null) {
+  //     router.push("/user");
+  //   } else router.push("/");
+  // }, [auth]);
 
-  }, [auth]);
+  activeUser("/user");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // const response = await fetch(
+    //   `https://localhost:7063/api/User/${data.get("email")}/${data.get(
+    //     "password"
+    //   )}`
+    // );
+    // if (response.ok) {
+    //   const data = await response.json();
+    //   setAuth(data);
+    // } else {
+    //   alert("Invalid email or password");
+    //   setOpen(true);
+    // }
 
-    const response = await fetch(`https://localhost:7063/api/User/${data.get("email")}/${data.get("password")}`);
-    if(response.ok){
-      const data = await response.json();
-      setAuth(data);
-    }
-    else{
-      alert("Login failed");
+    const response = await fetchUser(data.get("email"), data.get("password"));
+    if (response != "") {
+      setAuth(response);
+    } else {
+      setOpen(true);
     }
   };
-  
+
   return (
     <>
-      {isCreating ? <SignUpForm setIsCreating={setIsCreating} /> : null}  
+      {isCreating ? <SignUpForm setIsCreating={setIsCreating} /> : null}
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -59,25 +78,16 @@ export default function LoginForm() {
           id="password"
           sx={{ bgcolor: "white" }}
         />
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Link
-            href="#"
-            variant="body2"
-            underline="hover"
-            sx={{ color: "#717171" }}
-          >
-            Forgot password?
-          </Link>
-        </Box>
-
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2, bgcolor: "#483434" }}
+          sx={{ mt: 5, mb: 2, bgcolor: "#483434" }}
         >
           Login
         </Button>
+        
+        <SnackbarAlert message="Login failed" open={open} setOpen={setOpen} severity="error" />
 
         <Grid container sx={{ alignItems: "center" }}>
           <Grid item xs sx={{ height: 1.5, bgcolor: "text.secondary" }}></Grid>

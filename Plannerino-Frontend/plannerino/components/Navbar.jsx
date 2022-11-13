@@ -1,10 +1,6 @@
 import Link from "next/link";
 import Router from "next/router";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Typography from "@mui/material/Typography";
+import { Avatar, Box, Button, ButtonGroup, Typography } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import AssignmentIcon from '@mui/icons-material/Assignment';

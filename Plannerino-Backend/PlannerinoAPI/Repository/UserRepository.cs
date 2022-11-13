@@ -65,6 +65,11 @@ namespace PlannerinoAPI.Repository
 
         public bool DeleteUser(User user)
         {
+            var userGroups= _context.UserGroups.Where(ug => ug.User.Id == user.Id).Select(ug => ug.Group);
+            foreach (var group in userGroups)
+            {
+                group.Count--;
+            }
             _context.Remove(user);
             return Save();
         }

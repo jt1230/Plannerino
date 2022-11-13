@@ -1,38 +1,44 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import authState from "atoms/authState"
+import { useState } from "react";
+import SnackbarAlert from "components/SnackbarAlert";
+import activeUser from "features/users/active-user";
+import fetchAllUsers from "features/users/fetch-all-users";
+import postUser from "features/users/post-user";
 
 
 export default function SignUpForm({setIsCreating}) {
-  const [auth, setAuth] = useRecoilState(authState);
-  const router = useRouter();
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    if(auth != null){
-      router.push("/user");
-    }
-    else router.push("/");
-
-  }, [auth]);
+  activeUser("/user");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-	let postUser = {firstName:"", lastName:"", email:"", password:""};
-        postUser.firstName = data.get("firstName");
-        postUser.lastName = data.get("lastName");
-        postUser.email = data.get("email");
-        postUser.password = data.get("password");
+	let createUser = {firstName:"", lastName:"", email:"", password:""};
+  createUser.firstName = data.get("firstName");
+  createUser.lastName = data.get("lastName");
+  createUser.email = data.get("email");
+  createUser.password = data.get("password");
 
-    const response = await fetch(`https://localhost:7063/api/User?groupId=1`, {
-        method: "POST",
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify(postUser)
-        });
-	  setIsCreating(false);
+    // const response = await fetch(`https://localhost:7063/api/User`, {
+    //     method: "POST",
+    //     headers: {'content-type': 'application/json'},
+    //     body: JSON.stringify(postUser)
+    //     });
+
+    const getAllUsers = await fetchAllUsers();
+    var userExists = getAllUsers.find((user) => user.email === createUser.email);
+    if(userExists){
+      setError(true);
+      return
+    }
+    else{
+      const response = await postUser(createUser);
+      setSuccess(true);
+    }
+
   };
 
   return (
@@ -84,15 +90,29 @@ export default function SignUpForm({setIsCreating}) {
           id="password"
           sx={{ bgcolor: "white" }}
 		  />
-        
+        <Box display="flex" gap="1rem" mt="1rem">
+
         <Button
           type="submit"
+          fullWidth
           variant="contained"
           sx={{ bgcolor: "#483434" }}
 		  >
           Sign Up
         </Button>
+        <Button
+          type="button"
+          fullWidth
+          variant="outlined"
+          sx={{ borderColor: "#483434", color: "#483434" }}
+          onClick={() => setIsCreating(false)}
+		  >
+          Cancel
+        </Button>
+        </Box>
       </Box>
+      <SnackbarAlert message="User already exists" open={error} setOpen={setError} severity="error" />
+      <SnackbarAlert message="Sign up succeeded" open={success} setOpen={setSuccess} severity="success" />
 	  </Box>
   </>
   );

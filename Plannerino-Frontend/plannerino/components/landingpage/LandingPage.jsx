@@ -1,19 +1,10 @@
 import { Box, Container, Typography } from "@mui/material";
-import Head from "next/head";
-import { useRouter } from "next/router";
 import LoginForm from "components/landingpage/LoginForm";
 
 export default function LandingPage() {
-  const router = useRouter();
-  
+
   return (
     <>
-      <Head>
-        <title>Plannerino</title>
-        <meta name="description" content="Plan your time easier." />
-        <link rel="icon" href="/favicon.jpg" />
-      </Head>
-
       <Container
         component="main"
         sx={{
@@ -48,7 +39,6 @@ export default function LandingPage() {
             Easy planning, saving you time and headaches.
           </Typography>
           <LoginForm />
-          
         </Box>
       </Container>
     </>

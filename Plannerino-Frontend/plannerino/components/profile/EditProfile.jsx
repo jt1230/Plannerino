@@ -1,6 +1,8 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useRecoilState } from "recoil";
-import authState from "atoms/authState"
+import authState from "atoms/authState";
+import fetchUser from "features/users/fetch-user";
+import putUser from "features/users/put-user";
 
 export default function EditProfile({setIsEditing}) {
     const [auth, setAuth] = useRecoilState(authState);
@@ -9,22 +11,24 @@ export default function EditProfile({setIsEditing}) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        let putUser = {...auth};
-        putUser.firstName = data.get("firstName");
-        putUser.lastName = data.get("lastName");
-        putUser.password = data.get("password");;
-        putUser.email = data.get("email");;
-        console.log(putUser);
+        let userToBeUpdated = {...auth};
+        userToBeUpdated.firstName = data.get("firstName");
+        userToBeUpdated.lastName = data.get("lastName");
+        userToBeUpdated.password = data.get("password");
+        userToBeUpdated.email = data.get("email");
 
-        await fetch(`https://localhost:7063/api/User/${putUser.id}`, {
-        method: "PUT",
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify(putUser)
-        })
+        // await fetch(`https://localhost:7063/api/User/${auth.id}`, {
+        // method: "PUT",
+        // headers: {'content-type': 'application/json'},
+        // body: JSON.stringify(putUser)
+        // })
 
-        const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
-    const updatedData = await response.json();
-    setAuth(updatedData);
+        const updateUser = await putUser(auth.id, userToBeUpdated);
+
+    //     const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
+    // const updatedData = await response.json();
+    const getUpdatedUser = await fetchUser(userToBeUpdated.email, userToBeUpdated.password);
+    setAuth(getUpdatedUser);
         setIsEditing(false);
     };
 

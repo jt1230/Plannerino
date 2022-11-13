@@ -1,6 +1,8 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
+import postGroup from "features/users/post-group";
+import fetchUser from "features/users/fetch-user";
 
 export default function CreateGroup({ setIsCreating }) {
   const [auth, setAuth] = useRecoilState(authState);
@@ -8,21 +10,21 @@ export default function CreateGroup({ setIsCreating }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    let createGroup = {name:"", description:"", count: 1};
+    createGroup.name = data.get("name");
+    createGroup.description = data.get("description");
 
-    let postGroup = {name:"", description:"", count: 1};
-    postGroup.name = data.get("name");
-    postGroup.description = data.get("description");
+    // await fetch(`https://localhost:7063/api/Group?userId=${auth.id}`, {
+    //   method: "POST",
+    //   headers: { "content-type": "application/json" },
+    //   body: JSON.stringify(postGroup),
+    // });
 
-    await fetch(`https://localhost:7063/api/Group?userId=${auth.id}`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(postGroup),
-    });
-
-    const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
-    const updatedData = await response.json();
-    setAuth(updatedData);
-
+    const createUserGroup = await postGroup(auth.id, createGroup);
+    const updatedUser = await fetchUser(auth.email, auth.password);
+    // const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
+    // const updatedData = await response.json();
+    setAuth(updatedUser);
     setIsCreating(false);
     
   };
