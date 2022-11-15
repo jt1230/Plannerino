@@ -8,10 +8,9 @@ export default function CreateTask({ setAddTask }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let createTask = {title:"", category:"", description:"", isCompleted: false};
+    let createTask = {title:"", category:"", isCompleted: false};
     createTask.title = data.get("title");
     createTask.category = data.get("category");
-    createTask.description = data.get("description");
 
     await fetch(`https://localhost:7063/api/UserTask?userId=${auth.id}`, {
       method: "POST",
@@ -47,18 +46,6 @@ export default function CreateTask({ setAddTask }) {
               name="category"
               placeholder="Category"
               autoFocus
-              multiline
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="description"
-              label="Description"
-              name="description"
-              placeholder="Description"
-              autoFocus
-              multiline
             />
             <Box display="flex" gap={3} width="100%">
               <Button

@@ -72,10 +72,10 @@ namespace PlannerinoAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userTask = _userTaskRepository.GetUserTasks().FirstOrDefault(u => string.Equals(u.Title, userTaskCreate.Title, StringComparison.OrdinalIgnoreCase));
+            var userTask = _userTaskRepository.GetUserTasks().FirstOrDefault(u => u.Id == userTaskCreate.Id);
             if (userTask != null)
             {
-                ModelState.AddModelError("", "Event already exists!");
+                ModelState.AddModelError("", "Task already exists!");
                 return StatusCode(404, ModelState);
             }
 
@@ -96,11 +96,11 @@ namespace PlannerinoAPI.Controllers
         }
 
         //PUT: api/UserTask
-        [HttpPut("{userTaskId:int}")]
+        [HttpPut("{userTaskId:int}/{userId:int}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateUserTask(int userTaskId, [FromBody] UserTaskDto updatedUserTask)
+        public IActionResult UpdateUserTask(int userTaskId, int userId, [FromBody] UserTaskDto updatedUserTask)
         {
             if (updatedUserTask == null || userTaskId != updatedUserTask.Id)
             {
@@ -116,6 +116,8 @@ namespace PlannerinoAPI.Controllers
                 return BadRequest(ModelState);
 
             var userTaskToUpdate = _mapper.Map<UserTask>(updatedUserTask);
+
+            userTaskToUpdate.User = _userRepository.GetUser(userId);
 
             if (!_userTaskRepository.UpdateUserTask(userTaskToUpdate))
             {

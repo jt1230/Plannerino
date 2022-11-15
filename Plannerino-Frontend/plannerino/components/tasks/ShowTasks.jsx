@@ -1,27 +1,67 @@
-import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
+// OM JAG ORKAR 
+
+import {
+  Avatar,
+  Box,
+  Button,
+  Checkbox,
+  IconButton,
+  List,
+  ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction,
+  Typography,
+} from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import authState from "atoms/authState";
 import tasksState from "atoms/tasksState";
+import { TaskAltRounded } from "@mui/icons-material";
 
 export default function ShowTasks({ setShowTask, category, tasks }) {
   const auth = useRecoilValue(authState);
+  const [currentTasks, setCurrentTasks] = useState([...tasks]);
+  const [isChecked, setIsChecked] = useState();
 
-  const handleDeleteTask = async () => {
-    await fetch(
-      `https://localhost:7063/api/UserTask/${task.id}`,
-      {
-        method: "DELETE",
-      }
-    );
-  }
+  const isCheckboxChecked = (index) => {
+    setIsChecked(index)
+}
+
+  const handleDeleteTask = async (taskId) => {
+    await fetch(`https://localhost:7063/api/UserTask/${taskId}`, {
+      method: "DELETE",
+    });
+  };
 
   const handleExitBtn = (event) => {
     event.stopPropagation();
     setShowTask(false);
-  }
+  };
+
+  const toggleItem = (event) => {
+     
+    };
+    
+
+    // const updateTask = async (task) => {
+    //   await fetch(`https://localhost:7063/api/UserTask/${task.id}`, {
+    //     method: "PUT",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(taskToBeUpdated),
+    //   });
+    // };
+
+    // if (checked) {
+    //   taskToBeUpdated.completed = true;
+    //   updateTask(task);
+    // }
+    // else{
+    //   taskToBeUpdated.completed = false;
+    //   updateTask(task);
+    // }
+  // };
 
   return (
     <>
@@ -34,12 +74,12 @@ export default function ShowTasks({ setShowTask, category, tasks }) {
           right: 0,
           right: 0,
           mx: "auto",
-          top: "7.5%",
+          top: "8.6%",
           backgroundColor: "white",
           zIndex: 100,
-          height: "92.5%",
+          height: "91%",
           width: "25%",
-          border: 1,
+          borderLeft: 1,
         }}
       >
         <IconButton
@@ -54,30 +94,38 @@ export default function ShowTasks({ setShowTask, category, tasks }) {
         >
           <CancelIcon />
         </IconButton>
-        {tasks.filter(c => c == category).map(task => {
+
+        <List>
+
+        {currentTasks.map((task) => {
           return (
-            <Box>
-              <Typography>{task.title}</Typography>
-              <Typography>{task.description}</Typography>
-              <Typography>{task.category}</Typography>
-              <Typography>{task.isCompleted ? "Completed" : "In Progress"}</Typography>
-
-              <Button
-                variant="contained"
-                color="error"
-                startIcon={<DeleteIcon aria-label="delete task" />}
-                sx={{ mt: "auto", mb: "1rem" }}
-                onClick={handleDeleteTask}
+            <ListItem
+              key={task.id}
+              button
+              secondaryAction={
+                <IconButton edge="end" onClick={handleDeleteTask(task.id)}>
+                <DeleteIcon />
+              </IconButton>
+              }
               >
-                Delete Task
-              </Button>
-
-            </Box>
-
-          )
-        })
-
-        }
+              <ListItemIcon>
+                <Checkbox disableRipple edge="start" checked={task.isCompleted} />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  task.isCompleted ? (
+                    <b>
+                      <strike>{task.text}</strike>
+                    </b>
+                  ) : (
+                    task.title
+                    )
+                  }
+                  />
+            </ListItem>)
+           
+        })}
+      </List>
       </Box>
     </>
   );

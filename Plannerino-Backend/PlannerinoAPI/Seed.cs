@@ -184,25 +184,64 @@ namespace PlannerinoAPI
                     {
                         new UserTask()
                         {
-                            Title = "ICA",
+                            Title = "ICA - Milk",
                             Category = "Groceries",
-                            Description = "Milk, eggs, bread, cheese, butter",
                             IsCompleted = false,
                             User = jane,
                         },
                         new UserTask()
                         {
-                            Title = "Willys",
+                            Title = "ICA - Eggs",
                             Category = "Groceries",
-                            Description = "Chicken, beef, pork",
                             IsCompleted = false,
                             User = jane,
                         },
                         new UserTask()
                         {
-                            Title = "Hemköp",
+                            Title = "ICA - Bread",
                             Category = "Groceries",
-                            Description = "Toilet paper",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "ICA - Cheese",
+                            Category = "Groceries",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "ICA - Butter",
+                            Category = "Groceries",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "Willys - Chicken",
+                            Category = "Groceries",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "Willys - Beef",
+                            Category = "Groceries",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "Willys - Pork",
+                            Category = "Groceries",
+                            IsCompleted = false,
+                            User = jane,
+                        },
+                        new UserTask()
+                        {
+                            Title = "Hemköp - Toilet papers",
+                            Category = "Groceries",
                             IsCompleted = true,
                             User = jane,
                         },

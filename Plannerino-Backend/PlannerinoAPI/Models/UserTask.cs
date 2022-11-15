@@ -12,8 +12,6 @@ namespace PlannerinoAPI.Models
         [Required]
         [MaxLength(50)]
         public string Category { get; set; } = "";
-        [MaxLength(50)]
-        public string Description { get; set; } = "";
         public bool IsCompleted { get; set; }
         public User User { get; set; } = new User();
 

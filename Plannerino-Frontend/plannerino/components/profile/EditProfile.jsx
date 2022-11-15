@@ -65,7 +65,7 @@ export default function EditProfile({setIsEditing}) {
                     id="email"
                     label="Email Address"
                     name="email"
-                    placeholder="name@mail.com"
+                    placeholder={auth.email}
                     autoFocus
                     size="small"
                 />

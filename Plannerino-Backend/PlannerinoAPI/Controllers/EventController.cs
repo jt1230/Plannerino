@@ -97,11 +97,11 @@ namespace PlannerinoAPI.Controllers
         }
 
         //PUT: api/Event
-        [HttpPut("{eventId:int}")]
+        [HttpPut("{eventId:int}/{userId:int}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateEvent(int eventId, [FromBody] EventDto updatedEvent)
+        public IActionResult UpdateEvent(int eventId, int userId, [FromBody] EventDto updatedEvent)
         {
             if (updatedEvent == null || eventId != updatedEvent.Id)
             {
@@ -117,6 +117,8 @@ namespace PlannerinoAPI.Controllers
                 return BadRequest(ModelState);
 
             var eventToUpdate = _mapper.Map<Event>(updatedEvent);
+
+            eventToUpdate.User = _userRepository.GetUser(userId);
 
             if (!_eventRepository.UpdateEvent(eventToUpdate))
             {
