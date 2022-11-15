@@ -36,14 +36,14 @@ namespace PlannerinoAPI.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(200, Type = typeof(UserTask))]
         [ProducesResponseType(400)]
-        public IActionResult GetGroup(int id)
+        public IActionResult GetUserTask(int id)
         {
             if (!_userTaskRepository.UserTaskExists(id))
             {
                 return NotFound();
             }
             
-            var userTask = _mapper.Map<List<UserTaskDto>>(_userTaskRepository.GetUserTask(id));
+            var userTask = _mapper.Map<UserTaskDto>(_userTaskRepository.GetUserTask(id));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(userTask);

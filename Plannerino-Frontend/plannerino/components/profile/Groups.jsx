@@ -91,7 +91,7 @@ export default function Groups() {
           </Grid>
           <Grid container item xs={11} mx="1rem" mt="1rem" borderBottom={1}>
             <Typography
-              variant="subtitles2"
+              variant="subtitle2"
               pb={1}
               gutterBottom
               fontWeight="bold"
@@ -100,7 +100,7 @@ export default function Groups() {
               Groups
             </Typography>
             <Typography
-              variant="subtitles2"
+              variant="subtitle2"
               pb={1}
               gutterBottom
               fontWeight="bold"

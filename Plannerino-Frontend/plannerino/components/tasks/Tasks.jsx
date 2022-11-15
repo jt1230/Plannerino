@@ -1,87 +1,116 @@
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import EditIcon from '@mui/icons-material/Edit';
+import { Avatar, Button, Grid, IconButton, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Router from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
+import tasksState from "atoms/tasksState";
 import Navbar from "components/Navbar";
-import EditProfile from "components/profile/EditProfile";
-import Groups from "components/profile/Groups";
+import CreateTask from "components/tasks/CreateTask";
+import ShowTasks from "components/tasks/ShowTasks";
 
 export default function Tasks() {
   const [auth, setAuth] = useRecoilState(authState);
-  const [isEditing, setIsEditing] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("/static/dummyprofile.jpg");
+  const [tasks, setTasks] = useRecoilState(tasksState);
+  const [categories, setCategories] = useState([]);
+  const [currentTasks, setCurrentTasks] = useState([]);
+  const [showTask, setShowTask] = useState(false);
+  const [addTask, setAddTask] = useState(false);
 
   useEffect(() => {
-    if (profileImage) {
-      setImageUrl(URL.createObjectURL(profileImage));
+    const getAllTasks = async () => {
+      const response = await fetch(`https://localhost:7063/api/User/${auth.id}/tasks`)
+      let data = await response.json();
+      setTasks(data);
     }
-  }, [profileImage]);
+    getAllTasks();
+    allCategories();
 
-  if(auth == null){
+  }, [tasks]);
+
+  const handleTaskClick = (tasks) => {
+    setCurrentTasks((currentTasks = { ...tasks }));
+    setShowTask(true);
+  };
+
+  const allCategories = () =>{
+    let uniqueCategories = [];
+    for(var i = 0; i < tasks.length; i++){
+      if(!uniqueCategories.find(category => category == tasks[i].category)){
+        uniqueCategories.push(tasks[i].category);
+      }
+    }
+    setCategories(uniqueCategories);
+  }
+
+  if (auth == null) {
     Router.push('/');
   }
   else
-  return (
-    <>
-      <Grid container spacing={2} height="100vh">
-        <Grid item xs={3}>
-          <Navbar />
-        </Grid>
-        <Grid item xs={8} display="flex" flexDirection="column" borderLeft={1}>
-          <Typography variant="h4" gutterBottom>
-            My Tasks
-          </Typography>
-          <Grid container display="flex" height="100%">
-            <Grid item xs={4} sx={{ border: 1 }} display="flex" flexDirection="column" alignItems="center" textAlign={isEditing ? "center" : "left"}>
-              <Avatar
-                alt="Profile Pic"
-                src={imageUrl}
-                sx={{ height: 200, width: 200, my: "1rem" }}
-              />
-              <Button startIcon={<AddAPhotoIcon aria-label="change photo" />} variant="contained" sx={{ width: "65%" }} component="label">
-                <input hidden accept="image/*" multiple type="file" id="profile-image" onChange={e => setProfileImage(e.target.files[0])}/>
-                Change Photo
-              </Button>
-              {(isEditing ? <EditProfile setIsEditing={setIsEditing}/> : <Box sx={{ width: "65%" }}>
-                <Typography variant="body1" mt="1rem" ml="0.5rem" fontWeight="bold">
-                  Name:
-                </Typography>
-                <Typography variant="body2" mb="1rem" ml="0.5rem">
-                  {auth.firstName} {auth.lastName}
-                </Typography>
-                <Typography variantvariant="body1" fontWeight="bold" ml="0.5rem">
-                  Mail:
-                </Typography>
-                <Typography variant="body2" mb="1rem" ml="0.5rem">
-                  {auth.email}
-                </Typography>
-                <Button startIcon={<EditIcon aria-label="edit profile" />} variant="contained" sx={{ width: "100%" }} onClick={() => setIsEditing(true)}>
-                  Edit
-                </Button>
-              </Box>)}
-            </Grid>
-            <Grid container item xs={8} direction="column" >
-              <Grid item xs={8} sx={{ border: 1 }} >
-                Expenses
-              </Grid>
-              <Grid item xs={4} sx={{ border: 1 }} >
-                <Groups />
-            </Grid>
-            </Grid>
+    return (
+      <>
+        <Grid container spacing={2} height="100vh">
+          <Grid item xs={3}>
+            <Navbar />
           </Grid>
+          <Grid container item direction="column" xs={9} borderLeft={1} my="1rem">
+            <Grid item display="flex" justifyContent="space-between" alignItems="center">
+              <Typography variant="h4" gutterBottom>
+                My Tasks
+              </Typography>
+              <Button
+                endIcon={<AddIcon aria-label="add task" />}
+                variant="outlined"
+                size="medium"
+                sx={{ height: "80%", mr: "1rem" }}
+                onClick={() => setAddTask(true)}
+              >
+                Add Task
+              </Button>
+            </Grid>
+            {/* {tasks.map(task => {
+              return (
+                <Grid key={task.id} item display="flex" alignItems="center" borderTop={1} sx={{
+                  "&:hover": { background: "gray", cursor: "pointer" }
+                }}
+                onClick={() => handleTaskClick(task)}>
+                  <Avatar container
+                    sx={{ height: "3rem", width: "3rem", margin: 1 }}>
+                    <Typography variant="subtitle2">{task.category}</Typography>
+                  </Avatar>
+                  {task.title}
+                  <IconButton sx={{ml:"auto"}}>
+                    <MoreVertIcon aria-label="edit task" />
+                  </IconButton>
+                  {showTask ? <ShowTask setShowTask={setShowTask} task={currentTask} /> : null}
+                </Grid>
+              )
+            })}
+             */}
+             {categories.map(category => {
+              return (
+                <Grid key={category.id} item display="flex" alignItems="center" borderTop={1} sx={{
+                  "&:hover": { background: "gray", cursor: "pointer" }
+                }}
+                onClick={() => handleTaskClick(tasks)}>
+                  <Avatar container
+                    sx={{ height: "3rem", width: "3rem", margin: 1 }}>
+                    <Typography variant="subtitle2">{category}</Typography>
+                  </Avatar>
+                  {category}
+                  <IconButton sx={{ml:"auto"}}>
+                    <MoreVertIcon aria-label="edit task" />
+                  </IconButton>
+                  {showTask ? <ShowTasks setShowTask={setShowTask} category={category} tasks={currentTasks} /> : null}
+                </Grid>
+              )
+            })}
+          </Grid>
+          {addTask ? <CreateTask setAddTask={setAddTask} /> : null}
         </Grid>
-      </Grid>
 
-    </>
-  );
+      </>
+    );
 }

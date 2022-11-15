@@ -17,7 +17,6 @@ export default function Timesheets() {
           </Typography>
         </Grid>
       </Grid>
-      
     </>
   );
 }
