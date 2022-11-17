@@ -2,6 +2,10 @@ import '../styles/globals.css'
 import Head from 'next/head';
 import CssBaseline from '@mui/material/CssBaseline';
 import { RecoilRoot } from 'recoil';
+import "@fullcalendar/common/main.css";
+import "@fullcalendar/daygrid/main.css";
+import "@fullcalendar/timegrid/main.css";
+
 
 
 function MyApp({ Component, pageProps }) {

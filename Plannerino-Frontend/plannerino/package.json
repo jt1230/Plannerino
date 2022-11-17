@@ -9,14 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.18.6",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/roboto": "^4.5.8",
+    "@fullcalendar/common": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/react": "^5.11.2",
+    "@fullcalendar/timegrid": "^5.11.3",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.11",
+    "@mui/x-date-pickers": "^5.0.8",
     "axios": "^1.1.3",
+    "dayjs": "^1.11.6",
     "install": "^0.13.0",
     "next": "12.3.1",
+    "next-transpile-modules": "^10.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "recoil": "^0.7.6"

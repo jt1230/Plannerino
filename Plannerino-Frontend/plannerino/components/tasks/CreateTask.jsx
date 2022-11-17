@@ -1,9 +1,11 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material"
 import authState from "atoms/authState";
+import tasksState from "atoms/tasksState";
 import { useRecoilState } from "recoil";
 
 export default function CreateTask({ setAddTask }) {
   const [auth, setAuth] = useRecoilState(authState);
+  const [tasks, setTasks] = useRecoilState(tasksState)
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -12,13 +14,25 @@ export default function CreateTask({ setAddTask }) {
     createTask.title = data.get("title");
     createTask.category = data.get("category");
 
-    await fetch(`https://localhost:7063/api/UserTask?userId=${auth.id}`, {
+    const response = await fetch(`https://localhost:7063/api/UserTask?userId=${auth.id}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(createTask),
     });
     setAddTask(false);
     
+    const getAllTasks = async () => {
+			const response = await fetch(
+			  `https://localhost:7063/api/User/${auth.id}/tasks`
+			);
+			let data = await response.json();
+			setTasks(data);
+		  };
+		
+		if(response.ok){
+			getAllTasks();
+
+		}
   };
 
   return (

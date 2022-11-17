@@ -133,7 +133,8 @@ export default function Tasks() {
                       <Box
                         style={{ display: toggleEdit[task.id] ? "block" : "none" }}
                       >
-                         <EditTask task={clickedTask}/>
+                         <EditTask task={clickedTask} toggleEdit={toggleEdit}
+                          setToggleEdit={setToggleEdit}/>
                       </Box>
                       
                       {/* {isEditing ? 
