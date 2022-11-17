@@ -2,8 +2,6 @@ import { Box, Button, TextField } from "@mui/material";
 import { useRecoilState, useRecoilValue } from "recoil";
 import tasksState from "atoms/tasksState";
 import authState from "atoms/authState";
-import fetchUser from "features/users/fetch-user";
-import putUser from "features/users/put-user";
 
 export default function EditTask({task, toggleEdit, setToggleEdit}) {
     const auth = useRecoilValue(authState);

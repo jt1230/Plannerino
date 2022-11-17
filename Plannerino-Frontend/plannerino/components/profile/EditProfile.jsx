@@ -20,7 +20,7 @@ export default function EditProfile({setIsEditing}) {
         // await fetch(`https://localhost:7063/api/User/${auth.id}`, {
         // method: "PUT",
         // headers: {'content-type': 'application/json'},
-        // body: JSON.stringify(putUser)
+        // body: JSON.stringify(userToBeUpdated)
         // })
 
         const updateUser = await putUser(auth.id, userToBeUpdated);

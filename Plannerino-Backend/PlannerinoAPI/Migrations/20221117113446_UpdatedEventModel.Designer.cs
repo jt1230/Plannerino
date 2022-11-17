@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlannerinoAPI.Data;
 
@@ -11,9 +12,10 @@ using PlannerinoAPI.Data;
 namespace PlannerinoAPI.Migrations
 {
     [DbContext(typeof(PlannerinoContext))]
-    partial class PlannerinoContextModelSnapshot : ModelSnapshot
+    [Migration("20221117113446_UpdatedEventModel")]
+    partial class UpdatedEventModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,6 @@ namespace PlannerinoAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("AllDay")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Description")
                         .IsRequired()

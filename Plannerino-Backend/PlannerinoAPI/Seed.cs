@@ -150,8 +150,8 @@ namespace PlannerinoAPI
                         {
                             Title = "Dinner with Jane",
                             Description = "@Takame",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
+                            Start = DateTime.Now,
+                            End = DateTime.Now,
                             Type = "Home",
                             User = john,
                         },
@@ -159,8 +159,8 @@ namespace PlannerinoAPI
                         {
                             Title = "Dinner with John",
                             Description = "@Takame",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
+                            Start = DateTime.Now,
+                            End = DateTime.Now,
                             Type = "Home",
                             User = jane,
                         },
@@ -168,8 +168,8 @@ namespace PlannerinoAPI
                         {
                             Title = "Visit the dentist",
                             Description = "",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
+                            Start = DateTime.Now,
+                            End = DateTime.Now,
                             Type = "Home",
                             User = jane,
                         },

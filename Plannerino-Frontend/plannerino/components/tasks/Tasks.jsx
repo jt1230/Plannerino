@@ -4,7 +4,6 @@ import {
   Button,
   Grid,
   IconButton,
-  TextField,
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -40,10 +39,9 @@ export default function Tasks() {
     };
     getAllTasks();
     setSortedTasks([...tasks]);
-  }, [tasks]);
+  }, []);
 
   const handleTaskClick = (task) => {
-    // setShowTaskSettings(true);
     setClickedTask({ ...task });
     setToggleSettings({ ...toggleSettings, [task.id]: !toggleSettings[task.id] });
   };
@@ -62,7 +60,7 @@ export default function Tasks() {
           <Grid item xs={3}>
             <Navbar />
           </Grid>
-          <Grid container item xs={9} borderLeft={1}>
+          <Grid container item xs={9} borderLeft={1} >
             <Grid
               item
               xs={12}
@@ -70,6 +68,7 @@ export default function Tasks() {
               display="flex"
               justifyContent="space-between"
               alignItems="center"
+              maxHeight="10%"
             >
               <Typography variant="h4" gutterBottom>
                 My Tasks
@@ -84,7 +83,7 @@ export default function Tasks() {
                 Add Task
               </Button>
             </Grid>
-            <Grid container item xs={12} height="85vh" overflow="auto">
+            <Grid container item xs={12} maxHeight="90%" overflow="auto">
               {sortedTasks
                 .sort(
                   (a, b) =>
@@ -97,6 +96,7 @@ export default function Tasks() {
                       key={task.id}
                       item
                       xs={12}
+                      height="20%"
                       display="flex"
                       alignItems="center"
                       borderTop={1}
@@ -136,11 +136,6 @@ export default function Tasks() {
                          <EditTask task={clickedTask} toggleEdit={toggleEdit}
                           setToggleEdit={setToggleEdit}/>
                       </Box>
-                      
-                      {/* {isEditing ? 
-                  <Box style={{display: toggle[task.id] ? "block" : "none"}}>
-                    <EditTask setToggleEdit={setToggleEdit} task={clickedTask}/>
-                  </Box> : null} */}
                     </Grid>
                   );
                 })}

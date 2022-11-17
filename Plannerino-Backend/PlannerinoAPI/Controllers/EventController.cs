@@ -73,7 +73,7 @@ namespace PlannerinoAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userEvent = _eventRepository.GetEvents().FirstOrDefault(u => string.Equals(u.Title, eventCreate.Title, StringComparison.OrdinalIgnoreCase));
+            var userEvent = _eventRepository.GetEvents().FirstOrDefault(u => u.Id == eventCreate.Id);
             if (userEvent != null)
             {
                 ModelState.AddModelError("", "Event already exists!");

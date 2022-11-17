@@ -14,8 +14,9 @@ namespace PlannerinoAPI.Models
         [Required]
         [MaxLength(50)]
         public string Type { get; set; } = "";
-        public DateTime StartDate { get; set; } = DateTime.Now;
-        public DateTime EndDate { get; set; } = DateTime.Now;
+        public bool AllDay { get; set; } = false;
+        public DateTime Start { get; set; } = DateTime.Now;
+        public DateTime End { get; set; } = DateTime.Now;
         public User User { get; set; } = new User();
 
     }
