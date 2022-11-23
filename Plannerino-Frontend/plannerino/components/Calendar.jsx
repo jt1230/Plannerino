@@ -9,6 +9,8 @@ import eventsState from "atoms/eventsState";
 
 export default function Calendar() {
   const auth = useRecoilValue(authState);
+  const [newEvent, setNewEvent] = useState(null);
+  const [isAddingEvent, setIsAddingEvent] = useState(false);
 
   const handleEventClick = (eventInfo) => {
     console.log("clicked event", eventInfo.event.id);
@@ -33,7 +35,7 @@ export default function Calendar() {
     }
   };
 
-  const handleSelectClick = (addInfo) => {
+  const handleSelectClick = (addInfo) => {    
     let title = prompt("Please enter a new title for your event");
     let calendarApi = addInfo.view.calendar;
     calendarApi.unselect();
@@ -44,6 +46,7 @@ export default function Calendar() {
         start: addInfo.startStr,
         end: addInfo.endStr,
         allDay: addInfo.allDay,
+        color: "blue",
       });
 
       const createEvent = async () => {
@@ -77,11 +80,23 @@ export default function Calendar() {
         center: "title",
         right: "timeGridDay,timeGridWeek,dayGridMonth",
       }}
+      buttonText={{
+        today: "Today",
+        month: "Month",
+        week: "Week",
+        day: "Day",
+      }}
+      locale="en-gb"
+      firstDay={1}
+      slotDuration={'00:15:00'}
+      slotLabelInterval={'01:00:00'}
+      eventColor={"red"}
       nowIndicator={true}
       editable={true}
       dayMaxEvents={true}
-      selectable={true}
-      eventColor={"red"}
+      selectable={true} 
+      weekNumbers={true} 
+      slotEventOverlap={false}
       events={`https://localhost:7063/api/User/${auth.id}/events`}
       eventDidMount={function (info) {
         console.log(info.event.extendedProps);
@@ -95,7 +110,6 @@ export default function Calendar() {
       height="100%"
       select={handleSelectClick}
       eventClick={handleEventClick}
-      weekNumbers={true}
     />
   );
 }

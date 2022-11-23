@@ -1,11 +1,10 @@
-import Dashboard from "../../components/dashboard/Dashboard";
+import Profile from "../../components/profile/Profile";
 
 export default function Home() {
 
-  return (
-    <>
-      <Dashboard />
-      
-    </>
-  );
-}
+	return (
+	  <>
+		<Profile />
+	  </>
+	);
+  }

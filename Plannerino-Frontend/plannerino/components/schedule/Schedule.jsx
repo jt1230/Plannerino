@@ -30,11 +30,11 @@ export default function Schedule() {
   }
   return (
     <>  
-      <Grid container spacing={2} height="100vh">
-      <Grid item xs={3}>
+      <Grid container height="100vh">
+      <Grid item xs={2}>
           <Navbar />
         </Grid>
-        <Grid item xs={8} display="flex" borderLeft={1}>
+        <Grid item xs={10} display="flex" borderLeft={1}>
           <Typography variant="h3" component="h1" gutterBottom>
           SchedulePage
             yes

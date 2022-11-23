@@ -1,5 +1,4 @@
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import Navbar from "components/Navbar";
 import Router from "next/router";
 import authState from "atoms/authState";
@@ -14,14 +13,12 @@ export default function Timesheets() {
   }
   return (
     <>
-      <Grid container spacing={2} height="100vh">
-        <Grid item xs={3}>
+      <Grid container height="100vh">
+        <Grid item xs={2}>
           <Navbar />
         </Grid>
-        <Grid item xs={8.9} borderLeft={1} >
-
+        <Grid item xs={10} borderLeft={1} >
             <Calendar />
-
         </Grid>
       </Grid>
     </>

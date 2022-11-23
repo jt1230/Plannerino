@@ -1,7 +1,10 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import LoginForm from "components/landingpage/LoginForm";
 
 export default function LandingPage() {
+  const BG_IMG = "assets/wave-haikei.svg";
+  const LOGO = "assets/logo.png";
+  const LANDING_TEXT = "Easy planning, saving you time and headaches.";
 
   return (
     <>
@@ -10,36 +13,35 @@ export default function LandingPage() {
         sx={{
           height: "100vh",
           m: 0,
-          backgroundImage: `url(${"static/wave-haikei.svg"})`,
+          backgroundImage: `url(${BG_IMG})`,
           backgroundRepeat: "none",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
         }}
       >
-        <Box
-          sx={{
-            width: "40%",
-            mx: 15,
-            pt: 15,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+        <Grid container
+          direction="column"
+          width="40%"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+          pb="10rem"
+          mx="4rem"
         >
           <Box
             component="img"
             sx={{
-              height: 250,
+              height: "auto",
+              maxWidth: "100%",
             }}
             alt="Plannerino"
-            src="static/logo.png"
+            src={LOGO}
           />
-          <Typography component="p" variant="p">
-            Easy planning, saving you time and headaches.
+          <Typography variant="subtitle1" color="primary.darker">
+            {LANDING_TEXT}
           </Typography>
           <LoginForm />
-        </Box>
+        </Grid>
       </Container>
     </>
   );

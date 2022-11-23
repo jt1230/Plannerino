@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
@@ -86,8 +80,13 @@ export default function LoginForm() {
         >
           Login
         </Button>
-        
-        <SnackbarAlert message="Login failed" open={open} setOpen={setOpen} severity="error" />
+
+        <SnackbarAlert
+          message="Login failed"
+          open={open}
+          setOpen={setOpen}
+          severity="error"
+        />
 
         <Grid container sx={{ alignItems: "center" }}>
           <Grid item xs sx={{ height: 1.5, bgcolor: "text.secondary" }}></Grid>
