@@ -43,7 +43,7 @@ export default function Tasks() {
     };
     getAllTasks();
     setSortedTasks([...tasks]);
-  }, [auth, tasks]);
+  }, [auth]);
 
   const handleTaskClick = (task) => {
     setClickedTask({ ...task });

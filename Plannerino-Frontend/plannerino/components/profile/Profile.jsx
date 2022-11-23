@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import Router from "next/router";
-import { useEffect } from "react";
+import Face3Icon from "@mui/icons-material/Face3";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
@@ -15,18 +15,20 @@ import EditProfile from "components/profile/EditProfile";
 import Groups from "components/profile/Groups";
 import Tasks from "components/tasks/Tasks";
 import DeleteBtn from "components/ui/buttons/DeleteBtn";
+import Avatars from "./Avatars";
+import avatarState from "atoms/avatarState";
+import { useRecoilValue } from "recoil";
 
 export default function Profile() {
   const [auth, setAuth] = useRecoilState(authState);
   const [isEditing, setIsEditing] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("/assets/dummyprofile.jpg");
+  const [isChangingAvatar, setIsChangingAvatar] = useState(false);
+  const userAvatar = useRecoilValue(avatarState);
 
-  useEffect(() => {
-    if (profileImage) {
-      setImageUrl(URL.createObjectURL(profileImage));
-    }
-  }, [profileImage]);
+  const handleAvatar = () => {
+    setIsChangingAvatar(true);
+    console.log("avatar");
+  };
 
   if (auth == null) {
     Router.push("/");
@@ -37,13 +39,13 @@ export default function Profile() {
           <Grid item xs={2}>
             <Navbar />
           </Grid>
-          <Grid container item xs={10} borderLeft={1} >
+          <Grid container item xs={10} borderLeft={1}>
             <Grid item xs={12} paddingX={1} borderBottom={1}>
               <Typography variant="h4" gutterBottom>
                 My Profile
               </Typography>
             </Grid>
-            <Grid container item xs={12} >
+            <Grid container item xs={12}>
               <Grid
                 item
                 xs={3}
@@ -54,27 +56,21 @@ export default function Profile() {
                 alignItems="center"
                 textAlign={isEditing ? "center" : "left"}
               >
-                <Avatar
-                  alt="Profile Pic"
-                  src={imageUrl}
-                  sx={{ height: 200, width: 200, my: "1rem" }}
-                />
+                <Avatar sx={{ height: 150, width: 150, mt: "5rem" }}>
+                  {userAvatar }
+                </Avatar>
+                {isChangingAvatar ? (
+                  <Avatars setIsChangingAvatar={setIsChangingAvatar} />
+                ) : null}
                 <Button
                   startIcon={<AddAPhotoIcon aria-label="change photo" />}
                   variant="contained"
                   color="button"
                   sx={{ width: "65%", color: "white" }}
                   component="label"
+                  onClick={handleAvatar}
                 >
-                  <input
-                    hidden
-                    accept="image/*"
-                    multiple
-                    type="file"
-                    id="profile-image"
-                    onChange={(e) => setProfileImage(e.target.files[0])}
-                  />
-                  Change Photo
+                  Change Avatar
                 </Button>
                 {isEditing ? (
                   <EditProfile setIsEditing={setIsEditing} />
@@ -114,11 +110,19 @@ export default function Profile() {
                 )}
                 <DeleteBtn />
               </Grid>
-              <Grid container item xs={9} >
-                <Grid item xs={12} sx={{ maxHeight:"50vh", borderBottom:1}}>
+              <Grid container item xs={9}>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{ minHeight: "50vh", maxHeight: "50vh", borderBottom: 1 }}
+                >
                   <Tasks />
                 </Grid>
-                <Grid item xs={12} >
+                <Grid
+                  item
+                  xs={12}
+                  sx={{ minHeight: "40vh", maxHeight: "40vh" }}
+                >
                   <Groups />
                 </Grid>
               </Grid>

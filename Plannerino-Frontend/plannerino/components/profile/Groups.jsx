@@ -42,7 +42,7 @@ export default function Groups() {
 
     if (start == 0) setIsDisabled(true);
     else setIsDisabled(false);
-  }, [auth, start, groupList]);
+  }, [auth, start]);
 
   const handleBackClick = () => {
     if (start > 0 && end > PER_PAGE) {
@@ -70,7 +70,7 @@ export default function Groups() {
       {isCreating ? <CreateGroup setIsCreating={setIsCreating} /> : null}
       {isJoining ? <JoinGroup setIsJoining={setIsJoining} /> : null}
 
-      <Box flexDirection="column" minHeight="40vh" maxHeight="40vh">
+      <Box flexDirection="column" >
         <Grid container alignItems="center" >
           <Grid container item px="1rem" mt="1rem">
           <Grid item xs>
