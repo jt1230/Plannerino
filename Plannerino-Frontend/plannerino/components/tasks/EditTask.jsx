@@ -2,10 +2,8 @@ import { Box, Button, TextField } from "@mui/material";
 import { useRecoilState, useRecoilValue } from "recoil";
 import tasksState from "atoms/tasksState";
 import authState from "atoms/authState";
-import fetchUser from "features/users/fetch-user";
-import putUser from "features/users/put-user";
 
-export default function EditTask({task}) {
+export default function EditTask({task, toggleEdit, setToggleEdit}) {
     const auth = useRecoilValue(authState);
 	const [tasks, setTasks] = useRecoilState(tasksState);
 
@@ -34,14 +32,15 @@ export default function EditTask({task}) {
 		if(response.ok){
 			getAllTasks();
 
-		}  
+		}
+        setToggleEdit({ ...toggleEdit, [task.id]: !toggleEdit[task.id] });  
 
     };
 
 
     return (
         <>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ position:"absolute", left: 0, top: 0, zIndex:100, backgroundColor: "white", height:"50%", width:"50%" }} display="flex" flexDirection="row" gap="1rem" alignItems="center" > 
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ position:"absolute", left: 0, top: "25%", zIndex:100, backgroundColor: "white", height:"50%", width:"35%" }} display="flex" flexDirection="row" gap="1rem" alignItems="center" > 
 			<TextField
 				required
 				variant="filled"

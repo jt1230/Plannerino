@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useRouter } from "next/router";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
@@ -18,40 +11,25 @@ export default function LoginForm() {
   const [open, setOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [auth, setAuth] = useRecoilState(authState);
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   if (auth != null) {
-  //     router.push("/user");
-  //   } else router.push("/");
-  // }, [auth]);
-
-  activeUser("/user");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // const response = await fetch(
-    //   `https://localhost:7063/api/User/${data.get("email")}/${data.get(
-    //     "password"
-    //   )}`
-    // );
-    // if (response.ok) {
-    //   const data = await response.json();
-    //   setAuth(data);
-    // } else {
-    //   alert("Invalid email or password");
-    //   setOpen(true);
-    // }
-
-    const response = await fetchUser(data.get("email"), data.get("password"));
-    if (response != "") {
-      setAuth(response);
-    } else {
+    
+    if (data.get("email") == "" || data.get("password") == ""){
       setOpen(true);
     }
+    else{
+      const response = await fetchUser(data.get("email"), data.get("password"));
+      if (response == "") {
+        setOpen(true);
+      } else {
+        setAuth(response);
+      }
+    }
   };
-
+  
+  activeUser("/user");
   return (
     <>
       {isCreating ? <SignUpForm setIsCreating={setIsCreating} /> : null}
@@ -86,8 +64,13 @@ export default function LoginForm() {
         >
           Login
         </Button>
-        
-        <SnackbarAlert message="Login failed" open={open} setOpen={setOpen} severity="error" />
+
+        <SnackbarAlert
+          message="Login failed"
+          open={open}
+          setOpen={setOpen}
+          severity="error"
+        />
 
         <Grid container sx={{ alignItems: "center" }}>
           <Grid item xs sx={{ height: 1.5, bgcolor: "text.secondary" }}></Grid>

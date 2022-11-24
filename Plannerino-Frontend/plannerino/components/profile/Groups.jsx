@@ -1,4 +1,11 @@
-import { Avatar, Box, Grid, Button, IconButton, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Grid,
+  Button,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -12,7 +19,7 @@ import JoinGroup from "components/profile/JoinGroup";
 import ShowGroup from "components/profile/ShowGroup";
 
 export default function Groups() {
-  const PER_PAGE = 5;
+  const PER_PAGE = 4;
   const auth = useRecoilValue(authState);
   const [isDisabled, setIsDisabled] = useState(true);
   const [groupList, setGroupList] = useRecoilState(groupssState);
@@ -35,7 +42,7 @@ export default function Groups() {
 
     if (start == 0) setIsDisabled(true);
     else setIsDisabled(false);
-  }, [auth, start, groupList]);
+  }, [auth, start]);
 
   const handleBackClick = () => {
     if (start > 0 && end > PER_PAGE) {
@@ -63,19 +70,19 @@ export default function Groups() {
       {isCreating ? <CreateGroup setIsCreating={setIsCreating} /> : null}
       {isJoining ? <JoinGroup setIsJoining={setIsJoining} /> : null}
 
-      <Box flexDirection="column">
-        <Grid container alignItems="center" mx="0.5rem">
-          <Grid item xs={7}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
+      <Box flexDirection="column" >
+        <Grid container alignItems="center" >
+          <Grid container item px="1rem" mt="1rem">
+          <Grid item xs>
+            <Typography variant="body1" fontWeight="bold" gutterBottom>
               My Groups
             </Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs display="flex" gap="0.5rem" justifyContent="flex-end" >
             <Button
               endIcon={<AddIcon aria-label="join group" />}
               variant="outlined"
               size="small"
-              sx={{ mr: "0.5rem" }}
               onClick={() => setIsJoining(true)}
             >
               Join Group
@@ -89,9 +96,12 @@ export default function Groups() {
               Create Group
             </Button>
           </Grid>
-          <Grid container item xs={11} mx="1rem" mt="1rem" borderBottom={1}>
+
+          </Grid>
+          <Grid container item xs={12} mt="1rem" borderBottom="1px solid #e0e0e0">
             <Typography
               variant="subtitle2"
+              px="1rem"
               pb={1}
               gutterBottom
               fontWeight="bold"
@@ -101,6 +111,7 @@ export default function Groups() {
             </Typography>
             <Typography
               variant="subtitle2"
+              px="1rem"
               pb={1}
               gutterBottom
               fontWeight="bold"
@@ -117,21 +128,26 @@ export default function Groups() {
                   ) : null}
                   <Grid
                     sx={{
-                      "&:hover": { background: "gray", cursor: "pointer" },
+                      "&:hover": { background: "#e9e9e9", cursor: "pointer" },
                     }}
                     container
                     item
-                    borderTop={1}
+                    borderTop="1px solid #e0e0e0"
                     key={group.id + group.name}
                     alignItems="center"
                     gap="1rem"
                     px="0.5rem"
-                    height="2rem"
+                    height="3rem"
                     onClick={() => handleGroupClick(group)}
                   >
                     <Avatar sx={{ height: "1.5rem", width: "1.5rem" }} />
-                    <Typography>{group.name}</Typography>
-                    <Typography ml="auto" gutterBottom>
+                    <Box>
+                      <Typography variant="subtitle1" >{group.name}</Typography>
+                      <Typography variant="subtitle2" color="gray" >
+                        {group.description}
+                      </Typography>
+                    </Box>
+                    <Typography ml="auto" px="1rem" gutterBottom >
                       {group.count}
                     </Typography>
                   </Grid>
@@ -140,7 +156,7 @@ export default function Groups() {
             })}
           </Grid>
         </Grid>
-        <Box display="flex" justifyContent="flex-end" mr="1rem" mb="1rem"  >
+        <Box display="flex" justifyContent="flex-end" mr="1rem" mb="1rem">
           <IconButton
             variant="text"
             size="small"

@@ -27,11 +27,6 @@ namespace PlannerinoAPI.Repository
             return _context.Events.FirstOrDefault(e => e.Id == id);
         }
 
-        public ICollection<Event> GetEventsByType(string type)
-        {
-            return _context.Events.Where(e => e.Type == type).ToList();
-        }
-
         public bool EventExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);

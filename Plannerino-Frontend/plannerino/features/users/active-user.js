@@ -8,6 +8,8 @@ export default function activeUser(url){
 	const router = useRouter();	
 	
 	useEffect(() => {
+		console.log("checking auth...")
+		
 		if(auth != null){
 		  router.push(url);
 		}

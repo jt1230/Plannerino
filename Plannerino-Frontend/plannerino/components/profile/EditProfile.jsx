@@ -20,7 +20,7 @@ export default function EditProfile({setIsEditing}) {
         // await fetch(`https://localhost:7063/api/User/${auth.id}`, {
         // method: "PUT",
         // headers: {'content-type': 'application/json'},
-        // body: JSON.stringify(putUser)
+        // body: JSON.stringify(userToBeUpdated)
         // })
 
         const updateUser = await putUser(auth.id, userToBeUpdated);
@@ -86,7 +86,7 @@ export default function EditProfile({setIsEditing}) {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: "1rem", bgcolor: "#483434" }}
+                    sx={{ mt: "1rem"}}
                 >
                     Save
                 </Button>
@@ -94,7 +94,7 @@ export default function EditProfile({setIsEditing}) {
                     type="button"
                     fullWidth
                     variant="outlined"
-                    sx={{ mt: "1rem", color:"#483434", borderColor:"#483434" }}
+                    sx={{ mt: "1rem" }}
                     onClick={() => setIsEditing(false)}
                 >
                     Cancel

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -22,18 +22,17 @@ export default function TaskSettings({ task, toggleEdit, setToggleEdit }) {
         textAlign="center"
         sx={{
           position: "absolute",
-          right: 0,
+          right: "2%",
           mx: "auto",
-          top: "15%",
+          top: "5%",
           backgroundColor: "white",
           zIndex: 100,
-          width: "20%",
+          width: "15%",
           border: 1,
         }}
       >
         <Grid item xs={12} borderBottom={1}>
-          <Button
-            fullWidth
+          <Button size="small"
             startIcon={<EditIcon aria-label="edit" />}
             onClick={() => handleEditTask(task.id)}
           >
@@ -41,8 +40,7 @@ export default function TaskSettings({ task, toggleEdit, setToggleEdit }) {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button
-            fullWidth
+          <Button size="small"
             startIcon={<DeleteIcon aria-label="delete" />}
             onClick={() => handleDeleteTask(task.id)}
           >

@@ -49,19 +49,6 @@ namespace PlannerinoAPI.Controllers
             return Ok(userEvent);
         }
 
-        // GET: api/Event/type
-        [HttpGet("{type}")]
-        [ProducesResponseType(200, Type = typeof(Event))]
-        [ProducesResponseType(400)]
-        public IActionResult GetEventsByType(string type)
-        {
-            
-            var eventType = _mapper.Map<List<EventDto>>(_eventRepository.GetEventsByType(type));
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            return Ok(eventType);
-        }
-
         // POST: api/Event
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Event))]
@@ -73,7 +60,7 @@ namespace PlannerinoAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userEvent = _eventRepository.GetEvents().FirstOrDefault(u => string.Equals(u.Title, eventCreate.Title, StringComparison.OrdinalIgnoreCase));
+            var userEvent = _eventRepository.GetEvents().FirstOrDefault(u => u.Id == eventCreate.Id);
             if (userEvent != null)
             {
                 ModelState.AddModelError("", "Event already exists!");

@@ -56,7 +56,6 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "johndoe@mail.com",
                     Password = "johndoe",
-                    IsAdmin = false,
                 };
 
                 var jane = new User()
@@ -65,7 +64,6 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "janedoe@mail.com",
                     Password = "janedoe",
-                    IsAdmin = false,
                 };
 
                 var mary = new User()
@@ -74,7 +72,6 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "marydoe@mail.com",
                     Password = "marydoe",
-                    IsAdmin = false,
                 };
 
                 var joseph = new User()
@@ -83,7 +80,6 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "josephdoe@mail.com",
                     Password = "josephdoe",
-                    IsAdmin = false,
                 };
 
 
@@ -97,7 +93,6 @@ namespace PlannerinoAPI
                             LastName = "admin",
                             Email = "admin",
                             Password = "admin",
-                            IsAdmin = true,
                         },
                     },
                     new UserGroup()
@@ -149,28 +144,25 @@ namespace PlannerinoAPI
                         new Event()
                         {
                             Title = "Dinner with Jane",
-                            Description = "@Takame",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
-                            Type = "Home",
+                            Start = DateTime.Now,
+                            End = DateTime.Now,
+                            Category = "Home",
                             User = john,
                         },
                         new Event()
                         {
                             Title = "Dinner with John",
-                            Description = "@Takame",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
-                            Type = "Home",
+                            Start = DateTime.Now,
+                            End = DateTime.Now,
+                            Category = "Home",
                             User = jane,
                         },
                         new Event()
                         {
                             Title = "Visit the dentist",
-                            Description = "",
-                            StartDate = DateTime.Now,
-                            EndDate = DateTime.Now,
-                            Type = "Home",
+                            Start = DateTime.Now,
+                            End = DateTime.Now,
+                            Category = "Home",
                             User = jane,
                         },
                     };
