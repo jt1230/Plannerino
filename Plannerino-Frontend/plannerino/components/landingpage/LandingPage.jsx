@@ -28,7 +28,7 @@ export default function LandingPage() {
           height="100%"
           pb="6rem"
         >
-          <Grid item height="100%" width="38%" backgroundColor="rgb(222, 216, 211)" px="5rem" mt="5rem" textAlign="center">
+          <Grid item height="100%" width="35%" backgroundColor="rgb(222, 216, 211)" px="5rem" mt="5rem" textAlign="center">
             <Box
               component="img"
               sx={{

@@ -6,7 +6,6 @@ namespace PlannerinoAPI.Interfaces
     {
         ICollection<Event> GetEvents();
         Event GetEvent(int id);
-        ICollection<Event> GetEventsByType(string type);
         bool EventExists(int id);
         bool CreateEvent(Event userEvent);
         bool UpdateEvent(Event userEvent);

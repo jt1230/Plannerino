@@ -49,19 +49,6 @@ namespace PlannerinoAPI.Controllers
             return Ok(userEvent);
         }
 
-        // GET: api/Event/type
-        [HttpGet("{type}")]
-        [ProducesResponseType(200, Type = typeof(Event))]
-        [ProducesResponseType(400)]
-        public IActionResult GetEventsByType(string type)
-        {
-            
-            var eventType = _mapper.Map<List<EventDto>>(_eventRepository.GetEventsByType(type));
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            return Ok(eventType);
-        }
-
         // POST: api/Event
         [HttpPost]
         [ProducesResponseType(201, Type = typeof(Event))]
