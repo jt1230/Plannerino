@@ -16,19 +16,11 @@ export default function EditProfile({setIsEditing}) {
         userToBeUpdated.lastName = data.get("lastName");
         userToBeUpdated.password = data.get("password");
         userToBeUpdated.email = data.get("email");
-
-        // await fetch(`https://localhost:7063/api/User/${auth.id}`, {
-        // method: "PUT",
-        // headers: {'content-type': 'application/json'},
-        // body: JSON.stringify(userToBeUpdated)
-        // })
-
         const updateUser = await putUser(auth.id, userToBeUpdated);
 
-    //     const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
-    // const updatedData = await response.json();
-    const getUpdatedUser = await fetchUser(userToBeUpdated.email, userToBeUpdated.password);
-    setAuth(getUpdatedUser);
+        const getUpdatedUser = await fetchUser(userToBeUpdated.email, userToBeUpdated.password);
+        setAuth(getUpdatedUser);
+        
         setIsEditing(false);
     };
 
@@ -86,7 +78,8 @@ export default function EditProfile({setIsEditing}) {
                     type="submit"
                     fullWidth
                     variant="contained"
-                    sx={{ mt: "1rem"}}
+                    color="button"
+                    sx={{ mt: "1rem", color:"white"}}
                 >
                     Save
                 </Button>

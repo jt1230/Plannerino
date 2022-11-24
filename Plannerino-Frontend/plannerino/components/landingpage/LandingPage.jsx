@@ -45,7 +45,7 @@ export default function LandingPage() {
           </Grid>
           <Typography
             variant="subtitle2"
-            color="grey.800"
+            color="grey.400"
             position="absolute"
             bottom="0"
             right="1%"

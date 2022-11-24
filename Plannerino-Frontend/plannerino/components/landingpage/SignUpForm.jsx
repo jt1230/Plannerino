@@ -1,15 +1,12 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import SnackbarAlert from "components/SnackbarAlert";
-import activeUser from "features/users/active-user";
 import fetchAllUsers from "features/users/fetch-all-users";
 import postUser from "features/users/post-user";
 
 export default function SignUpForm({ setIsCreating }) {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  activeUser("/user");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,19 +18,12 @@ export default function SignUpForm({ setIsCreating }) {
     createUser.email = data.get("email");
     createUser.password = data.get("password");
 
-    // const response = await fetch(`https://localhost:7063/api/User`, {
-    //     method: "POST",
-    //     headers: {'content-type': 'application/json'},
-    //     body: JSON.stringify(postUser)
-    //     });
-
     const getAllUsers = await fetchAllUsers();
     var userExists = getAllUsers.find(
       (user) => user.email === createUser.email
     );
     if (userExists) {
       setError(true);
-      return;
     } else {
       const response = await postUser(createUser);
       setSuccess(true);

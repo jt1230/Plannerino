@@ -1,25 +1,34 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import Router from "next/router";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
 import SignUpForm from "components/landingpage/SignUpForm";
 import SnackbarAlert from "components/SnackbarAlert";
 import fetchUser from "features/users/fetch-user";
-import activeUser from "features/users/active-user";
 
 export default function LoginForm() {
   const [open, setOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [auth, setAuth] = useRecoilState(authState);
 
+  useEffect(() => {
+		console.log("checking auth...")
+		
+		if(auth != null){
+		  Router.push("/user");
+		}
+		else Router.push("/");
+	
+	  }, [auth]);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    
-    if (data.get("email") == "" || data.get("password") == ""){
+
+    if (data.get("email") == "" || data.get("password") == "") {
       setOpen(true);
-    }
-    else{
+    } else {
       const response = await fetchUser(data.get("email"), data.get("password"));
       if (response == "") {
         setOpen(true);
@@ -28,8 +37,7 @@ export default function LoginForm() {
       }
     }
   };
-  
-  activeUser("/user");
+
   return (
     <>
       {isCreating ? <SignUpForm setIsCreating={setIsCreating} /> : null}
@@ -64,14 +72,6 @@ export default function LoginForm() {
         >
           Login
         </Button>
-
-        <SnackbarAlert
-          message="Login failed"
-          open={open}
-          setOpen={setOpen}
-          severity="error"
-        />
-
         <Grid container sx={{ alignItems: "center" }}>
           <Grid item xs sx={{ height: 1.5, bgcolor: "text.secondary" }}></Grid>
           <Grid item xs>
@@ -91,6 +91,12 @@ export default function LoginForm() {
           Sign Up
         </Button>
       </Box>
+      <SnackbarAlert
+        message="Login failed"
+        open={open}
+        setOpen={setOpen}
+        severity="error"
+      />
     </>
   );
 }

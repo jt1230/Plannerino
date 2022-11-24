@@ -1,22 +1,15 @@
-import {
-  Avatar,
-  Box,
-  Grid,
-  Button,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Grid, Button, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useEffect } from "react";
-import { useRecoilValue, useRecoilState } from "recoil";
 import { useState } from "react";
+import { useRecoilValue, useRecoilState } from "recoil";
 import authState from "atoms/authState";
 import groupssState from "atoms/groupsState";
-import CreateGroup from "components/profile/CreateGroup";
-import JoinGroup from "components/profile/JoinGroup";
-import ShowGroup from "components/profile/ShowGroup";
+import CreateGroup from "components/groups/CreateGroup";
+import JoinGroup from "components/groups/JoinGroup";
+import ShowGroup from "components/groups/ShowGroup";
 
 export default function Groups() {
   const PER_PAGE = 4;
@@ -65,40 +58,46 @@ export default function Groups() {
     setCurrentGroup((currentGroup = { ...group }));
     setShowInfo(true);
   };
+  
   return (
     <>
       {isCreating ? <CreateGroup setIsCreating={setIsCreating} /> : null}
       {isJoining ? <JoinGroup setIsJoining={setIsJoining} /> : null}
 
-      <Box flexDirection="column" >
-        <Grid container alignItems="center" >
+      <Box flexDirection="column">
+        <Grid container alignItems="center">
           <Grid container item px="1rem" mt="1rem">
-          <Grid item xs>
-            <Typography variant="body1" fontWeight="bold" gutterBottom>
-              My Groups
-            </Typography>
+            <Grid item xs>
+              <Typography variant="body1" fontWeight="bold" gutterBottom>
+                My Groups
+              </Typography>
+            </Grid>
+            <Grid item xs display="flex" gap="0.5rem" justifyContent="flex-end">
+              <Button
+                endIcon={<AddIcon aria-label="join group" />}
+                variant="outlined"
+                size="small"
+                onClick={() => setIsJoining(true)}
+              >
+                Join Group
+              </Button>
+              <Button
+                endIcon={<AddIcon aria-label="create group" />}
+                variant="outlined"
+                size="small"
+                onClick={() => setIsCreating(true)}
+              >
+                Create Group
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs display="flex" gap="0.5rem" justifyContent="flex-end" >
-            <Button
-              endIcon={<AddIcon aria-label="join group" />}
-              variant="outlined"
-              size="small"
-              onClick={() => setIsJoining(true)}
-            >
-              Join Group
-            </Button>
-            <Button
-              endIcon={<AddIcon aria-label="create group" />}
-              variant="outlined"
-              size="small"
-              onClick={() => setIsCreating(true)}
-            >
-              Create Group
-            </Button>
-          </Grid>
-
-          </Grid>
-          <Grid container item xs={12} mt="1rem" borderBottom="1px solid #e0e0e0">
+          <Grid
+            container
+            item
+            xs={12}
+            mt="1rem"
+            borderBottom="1px solid #e0e0e0"
+          >
             <Typography
               variant="subtitle2"
               px="1rem"
@@ -142,12 +141,12 @@ export default function Groups() {
                   >
                     <Avatar sx={{ height: "1.5rem", width: "1.5rem" }} />
                     <Box>
-                      <Typography variant="subtitle1" >{group.name}</Typography>
-                      <Typography variant="subtitle2" color="gray" >
+                      <Typography variant="subtitle1">{group.name}</Typography>
+                      <Typography variant="subtitle2" color="gray">
                         {group.description}
                       </Typography>
                     </Box>
-                    <Typography ml="auto" px="1rem" gutterBottom >
+                    <Typography ml="auto" px="1rem" gutterBottom>
                       {group.count}
                     </Typography>
                   </Grid>

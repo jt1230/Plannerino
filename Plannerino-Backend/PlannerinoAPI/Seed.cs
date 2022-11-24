@@ -56,6 +56,7 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "johndoe@mail.com",
                     Password = "johndoe",
+                    Avatar = "assets/avatar-beach.svg"
                 };
 
                 var jane = new User()
@@ -64,6 +65,7 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "janedoe@mail.com",
                     Password = "janedoe",
+                    Avatar = "assets/avatar-happycat.svg"
                 };
 
                 var mary = new User()
@@ -72,6 +74,7 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "marydoe@mail.com",
                     Password = "marydoe",
+                    Avatar = "assets/avatar-logic.svg"
                 };
 
                 var joseph = new User()
@@ -80,6 +83,7 @@ namespace PlannerinoAPI
                     LastName = "Doe",
                     Email = "josephdoe@mail.com",
                     Password = "josephdoe",
+                    Avatar = "assets/avatar-profile2.svg"
                 };
 
 

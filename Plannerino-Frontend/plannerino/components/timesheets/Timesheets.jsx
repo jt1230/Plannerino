@@ -10,7 +10,7 @@ export default function Timesheets() {
 
   if (auth == null) {
     Router.push("/");
-  }
+  }else
   return (
     <>
       <Grid container height="100vh">

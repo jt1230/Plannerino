@@ -88,12 +88,12 @@ export default function ShowGroup({ setShowInfo, group }) {
             return (
               <Box>
                 <Avatar
-                  container
+                  src={member.avatar}
+                  alt={member.firstName + " " + member.lastName}
                   key={member.id}
                   sx={{ height: "4rem", width: "4rem", margin: 1 }}
-                >
-                  {member.firstName}
-                </Avatar>
+                
+                />
                 <Typography>
                   {member.firstName} {member.lastName}
                 </Typography>
