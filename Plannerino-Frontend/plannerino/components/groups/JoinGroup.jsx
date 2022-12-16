@@ -1,71 +1,48 @@
-import {
-  Autocomplete,
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useRecoilState } from "recoil";
+import { Autocomplete, Avatar, Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useState, useEffect } from "react";
 import authState from "atoms/authState";
 import groupssState from "atoms/groupsState";
+import createElement from "features/users/create-element";
+import editElement from "features/users/edit-element";
+import fetchElement from "features/users/fetch-element";
 
 export default function JoinGroup({ setIsJoining }) {
   const [auth, setAuth] = useRecoilState(authState);
-  const [groupList, setGroupList] = useRecoilState(groupssState);
+  const setUserGroups = useSetRecoilState(groupssState);
   const [allGroups, setAllGroups] = useState([]);
   const [searchGroup, setSearchGroup] = useState(null);
   const [searchGroupMembers, setSearchGroupMembers] = useState([]);
-  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     const getAllGroups = async () => {
-      const response = await fetch(`https://localhost:7063/api/Group`);
-      let data = await response.json();
+      const data = await fetchElement(`https://localhost:7063/api/Group`);
       setAllGroups(data);
     };
     getAllGroups();
 
-  }, [searchGroup]);
-
-  useEffect(() => {
     const getGroupMembers = async () => {
-      const response = await fetch(
-        `https://localhost:7063/api/Group/${searchGroup.id}/users`
-      );
-        let data = await response.json();
-        setSearchGroupMembers(data);
-
+      const data = await fetchElement(`https://localhost:7063/api/Group/${searchGroup.id}/users`);
+      setSearchGroupMembers(data);
     };
-    if (searchGroup) getGroupMembers();
+    if(searchGroup){
+      getGroupMembers();
+    }
+
   }, [searchGroup]);
 
   const handleJoinBtn = async (event) => {
     event.preventDefault();
 
-    const response = await fetch(
-      `https://localhost:7063/api/Group/UserGroup?userId=${auth.id}&groupId=${searchGroup.id}`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({})
-      }
-    );
-    if(response.ok){
-      await fetch(`https://localhost:7063/api/Group/${searchGroup.id}`,
-      {
-        method: "PUT",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          id: searchGroup.id,
-          name: searchGroup.name,
-          description: searchGroup.description,
-          count: searchGroup.count + 1,
-        })
-      })
+    const createUserGroup = await createElement( `https://localhost:7063/api/Group/UserGroup?userId=${auth.id}&groupId=${searchGroup.id}`, {});
+
+    // If usergroup was successfully created, update group count
+    if(createUserGroup === 200){
+      let groupToBeUpdated = { ...searchGroup };
+      groupToBeUpdated.count = groupToBeUpdated.count + 1;
+      await editElement(`https://localhost:7063/api/Group/${searchGroup.id}`, groupToBeUpdated)
     }
+
     const getUser = async () =>{
       const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
       const updatedData = await response.json();
@@ -78,7 +55,7 @@ export default function JoinGroup({ setIsJoining }) {
         `https://localhost:7063/api/User/${auth.id}/groups`
       );
       let data = await response.json();
-      setGroupList(data);
+      setUserGroups(data);
     };
     getGroups();
 
@@ -118,7 +95,6 @@ export default function JoinGroup({ setIsJoining }) {
             value={searchGroup}
             onChange={(event, searchValue) => {
               setSearchGroup({ ...searchValue });
-              setShowInfo(true);
             }}
             options={allGroups}
             getOptionLabel={(option) => option.name || ""}
@@ -137,12 +113,10 @@ export default function JoinGroup({ setIsJoining }) {
               return (
                 <Box display="flex" alignItems="center" gap="1rem">
                   <Avatar
-                    container
+                    src={member.avatar}
                     key={member.id}
                     sx={{ height: "2rem", width: "2rem", margin: 1 }}
-                  >
-                    {member.firstName}
-                  </Avatar>
+                  />
                   <Typography variant="body2">
                     {member.firstName} {member.lastName}
                   </Typography>

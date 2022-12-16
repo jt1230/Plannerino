@@ -1,11 +1,11 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import Router from "next/router";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import authState from "atoms/authState";
 import SignUpForm from "components/landingpage/SignUpForm";
-import SnackbarAlert from "components/SnackbarAlert";
-import fetchUser from "features/users/fetch-user";
+import SnackbarAlert from "components/ui/alerts/SnackbarAlert";
+import fetchElement from "features/users/fetch-element";
 
 export default function LoginForm() {
   const [open, setOpen] = useState(false);
@@ -13,27 +13,23 @@ export default function LoginForm() {
   const [auth, setAuth] = useRecoilState(authState);
 
   useEffect(() => {
-		console.log("checking auth...")
-		
-		if(auth != null){
-		  Router.push("/user");
-		}
-		else Router.push("/");
-	
-	  }, [auth]);
-  
+    if (auth != null) {
+      Router.push("/user");
+    } else Router.push("/");
+  }, [auth]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
 
+    const data = new FormData(event.currentTarget);
     if (data.get("email") == "" || data.get("password") == "") {
       setOpen(true);
     } else {
-      const response = await fetchUser(data.get("email"), data.get("password"));
-      if (response == "") {
+      const getUser = await fetchElement(`https://localhost:7063/api/User/${data.get("email")}/${data.get("password")}`);
+      if (getUser == "") {
         setOpen(true);
       } else {
-        setAuth(response);
+        setAuth(getUser);
       }
     }
   };

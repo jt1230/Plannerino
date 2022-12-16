@@ -1,38 +1,28 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material"
+import { Box, Button, TextField, Typography } from "@mui/material"
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import authState from "atoms/authState";
 import tasksState from "atoms/tasksState";
-import { useRecoilState } from "recoil";
+import fetchElement from "features/users/fetch-element";
+import createElement from "features/users/create-element";
 
 export default function CreateTask({ setAddTask }) {
-  const [auth, setAuth] = useRecoilState(authState);
-  const [tasks, setTasks] = useRecoilState(tasksState)
+  const auth = useRecoilValue(authState);
+  const setTasks = useSetRecoilState(tasksState)
   
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let createTask = {title:"", category:"", isCompleted: false};
-    createTask.title = data.get("title");
-    createTask.category = data.get("category");
-
-    const response = await fetch(`https://localhost:7063/api/UserTask?userId=${auth.id}`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(createTask),
-    });
-    setAddTask(false);
+    let taskToBeCreated = {title:"", category:"", isCompleted: false};
+    taskToBeCreated.title = data.get("title");
+    taskToBeCreated.category = data.get("category");
+    const createTask = await createElement(`https://localhost:7063/api/UserTask?userId=${auth.id}`, taskToBeCreated);
     
-    const getAllTasks = async () => {
-			const response = await fetch(
-			  `https://localhost:7063/api/User/${auth.id}/tasks`
-			);
-			let data = await response.json();
-			setTasks(data);
-		  };
-		
-		if(response.ok){
-			getAllTasks();
-
+		// If the task was created successfully, update tasks on client.
+    if(createTask === 200){
+      const updatedTasksList = await fetchElement(`https://localhost:7063/api/User/${auth.id}/tasks`);
+      setTasks(updatedTasksList);
 		}
+    setAddTask(false);
   };
 
   return (

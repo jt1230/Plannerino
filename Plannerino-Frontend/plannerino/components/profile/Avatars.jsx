@@ -21,20 +21,31 @@ export default function Avatars({ setIsChangingAvatar }) {
       flexDirection="column"
       alignItems="center"
       justifyContent="space-aroubd"
-    > 
-      <Box display="flex" flexWrap="wrap" gap={1.5} margin="2rem" justifyContent="center">
-      
-      {avatars.map((avatar) => (
-        <Avatar key={avatar.id}
-        src={avatar.image}
-        alt={auth.firstName + " " + auth.lastName}
-            sx={{ height: 60, width: 60, "&:hover": { cursor: "pointer" }, boxShadow:"0 0 4px #e6e6e6" }}
+    >
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        gap={1.5}
+        margin="2rem"
+        justifyContent="center"
+      >
+        {avatars.map((avatar) => (
+          <Avatar
+            key={avatar.id}
+            src={avatar.image}
+            alt={auth.firstName + " " + auth.lastName}
+            sx={{
+              height: 60,
+              width: 60,
+              "&:hover": { cursor: "pointer" },
+              boxShadow: "0 0 4px #e6e6e6",
+            }}
             onClick={() => {
               setAvatar(avatar.image);
               setIsChangingAvatar(false);
             }}
           />
-      ))}
+        ))}
       </Box>
       <Button variant="outlined" onClick={() => setIsChangingAvatar(false)}>
         Cancel

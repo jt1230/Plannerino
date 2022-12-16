@@ -1,8 +1,8 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import SnackbarAlert from "components/SnackbarAlert";
-import fetchAllUsers from "features/users/fetch-all-users";
-import postUser from "features/users/post-user";
+import SnackbarAlert from "components/ui/alerts/SnackbarAlert";
+import fetchElement from "features/users/fetch-element";
+import createElement from "features/users/create-element";
 
 export default function SignUpForm({ setIsCreating }) {
   const [error, setError] = useState(false);
@@ -12,20 +12,18 @@ export default function SignUpForm({ setIsCreating }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    let createUser = { firstName: "", lastName: "", email: "", password: "" };
-    createUser.firstName = data.get("firstName");
-    createUser.lastName = data.get("lastName");
-    createUser.email = data.get("email");
-    createUser.password = data.get("password");
+    let userToBeCreated = { firstName: "", lastName: "", email: "", password: "" };
+    userToBeCreated.firstName = data.get("firstName");
+    userToBeCreated.lastName = data.get("lastName");
+    userToBeCreated.email = data.get("email");
+    userToBeCreated.password = data.get("password");
 
-    const getAllUsers = await fetchAllUsers();
-    var userExists = getAllUsers.find(
-      (user) => user.email === createUser.email
-    );
+    const getAllUsers = await fetchElement("https://localhost:7063/api/User");
+    var userExists = getAllUsers.find((user) => user.email === userToBeCreated.email);
     if (userExists) {
       setError(true);
     } else {
-      const response = await postUser(createUser);
+      const createUser = await createElement(userToBeCreated);
       setSuccess(true);
     }
   };

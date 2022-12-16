@@ -2,20 +2,21 @@ import { Avatar, Box, Grid, Button, IconButton, Typography } from "@mui/material
 import AddIcon from "@mui/icons-material/Add";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import authState from "atoms/authState";
 import groupssState from "atoms/groupsState";
 import CreateGroup from "components/groups/CreateGroup";
 import JoinGroup from "components/groups/JoinGroup";
 import ShowGroup from "components/groups/ShowGroup";
+import fetchElement from "features/users/fetch-element";
 
 export default function Groups() {
   const PER_PAGE = 4;
   const auth = useRecoilValue(authState);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [groupList, setGroupList] = useRecoilState(groupssState);
+  const [dbGroups, setDbGroups] = useRecoilState(groupssState);
+  const [groups, setGroups] = useState([]);
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(start + PER_PAGE);
   const [showInfo, setShowInfo] = useState(false);
@@ -23,19 +24,22 @@ export default function Groups() {
   const [isCreating, setIsCreating] = useState(false);
   const [currentGroup, setCurrentGroup] = useState(null);
 
+  // Runs on first render, other components will update tasks.
   useEffect(() => {
     const getGroups = async () => {
-      const response = await fetch(
-        `https://localhost:7063/api/User/${auth.id}/groups`
-      );
-      let data = await response.json();
-      setGroupList(data);
+      const data = await fetchElement(`https://localhost:7063/api/User/${auth.id}/groups`);
+      setDbGroups(data);
     };
     getGroups();
 
     if (start == 0) setIsDisabled(true);
     else setIsDisabled(false);
-  }, [auth, start]);
+  }, [start]);
+
+  // To avoid callback hell, copy dbGroups to a new array that re-mounts everytime dbGroups changes.
+  useEffect(() => {
+    setGroups([...dbGroups]);
+  }, [dbGroups])
 
   const handleBackClick = () => {
     if (start > 0 && end > PER_PAGE) {
@@ -48,7 +52,7 @@ export default function Groups() {
   };
 
   const handleNextClick = () => {
-    if (end < groupList.length && end >= PER_PAGE) {
+    if (end < groups.length && end >= PER_PAGE) {
       setStart((start) => start + PER_PAGE);
       setEnd((end) => end + PER_PAGE);
     }
@@ -64,7 +68,7 @@ export default function Groups() {
       {isCreating ? <CreateGroup setIsCreating={setIsCreating} /> : null}
       {isJoining ? <JoinGroup setIsJoining={setIsJoining} /> : null}
 
-      <Box flexDirection="column">
+      <Box flexDirection="column" sx={{maxHeight: "1rem"}}>
         <Grid container alignItems="center">
           <Grid container item px="1rem" mt="1rem">
             <Grid item xs>
@@ -119,7 +123,7 @@ export default function Groups() {
             >
               Members
             </Typography>
-            {groupList.slice(start, end).map((group) => {
+            {groups.slice(start, end).map((group) => {
               return (
                 <>
                   {showInfo ? (
@@ -135,11 +139,11 @@ export default function Groups() {
                     key={group.id + group.name}
                     alignItems="center"
                     gap="1rem"
-                    px="0.5rem"
+                    px="0.8rem"
                     height="3rem"
                     onClick={() => handleGroupClick(group)}
                   >
-                    <Avatar sx={{ height: "1.5rem", width: "1.5rem" }} />
+                    <Avatar sx={{ height: "2rem", width: "2rem" }} />
                     <Box>
                       <Typography variant="subtitle1">{group.name}</Typography>
                       <Typography variant="subtitle2" color="gray">
