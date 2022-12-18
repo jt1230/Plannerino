@@ -1,15 +1,16 @@
 import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useEffect, useState } from "react";
 import authState from "atoms/authState";
 import groupssState from "atoms/groupsState";
+import fetchElement from "features/users/fetch-element";
+import deleteElement from "features/users/delete-element";
 
 export default function ShowGroup({ setShowInfo, group }) {
   const auth = useRecoilValue(authState);
-  const groups = useRecoilValue(groupssState);
-  const [groupList, setGroupList] = useRecoilState(groupssState);
+  const setUserGroups = useSetRecoilState(groupssState);
   const [groupMembers, setGroupMembers] = useState([]);
 
   useEffect(() => {
@@ -24,21 +25,12 @@ export default function ShowGroup({ setShowInfo, group }) {
   }, [group]);
 
   const handleLeaveGroup = async () => {
-    await fetch(
-      `https://localhost:7063/api/Group/${group.id}/usergroup?userId=${auth.id}`,
-      {
-        method: "DELETE",
-      }
-    );
-    
-    const getGroups = async () => {
-      const response = await fetch(
-        `https://localhost:7063/api/User/${auth.id}/groups`
-      );
-      let data = await response.json();
-      setGroupList(data);
-    };
-    getGroups();
+    const deleteUserGroup = await deleteElement(`https://localhost:7063/api/Group/${group.id}/usergroup?userId=${auth.id}`)
+
+    if(deleteUserGroup === 200){
+      const data = await fetchElement(`https://localhost:7063/api/User/${auth.id}/groups`)
+      setUserGroups(data);
+    }
     setShowInfo(false);
   };
 
@@ -88,12 +80,12 @@ export default function ShowGroup({ setShowInfo, group }) {
             return (
               <Box>
                 <Avatar
-                  container
+                  src={member.avatar}
+                  alt={member.firstName + " " + member.lastName}
                   key={member.id}
                   sx={{ height: "4rem", width: "4rem", margin: 1 }}
-                >
-                  {member.firstName}
-                </Avatar>
+                
+                />
                 <Typography>
                   {member.firstName} {member.lastName}
                 </Typography>

@@ -1,32 +1,29 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import authState from "atoms/authState";
-import postGroup from "features/users/post-group";
-import fetchUser from "features/users/fetch-user";
+import groupsState from "atoms/groupsState";
+import createElement from "features/users/create-element";
+import fetchElement from "features/users/fetch-element";
 
 export default function CreateGroup({ setIsCreating }) {
-  const [auth, setAuth] = useRecoilState(authState);
+  const auth = useRecoilValue(authState);
+  const setGroups = useSetRecoilState(groupsState);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    let createGroup = {name:"", description:"", count: 1};
+    let createGroup = {name:"", description:""};
     createGroup.name = data.get("name");
     createGroup.description = data.get("description");
 
-    // await fetch(`https://localhost:7063/api/Group?userId=${auth.id}`, {
-    //   method: "POST",
-    //   headers: { "content-type": "application/json" },
-    //   body: JSON.stringify(postGroup),
-    // });
+    const createUserGroup = await createElement(`https://localhost:7063/api/Group?userId=${auth.id}`, createGroup)
 
-    const createUserGroup = await postGroup(auth.id, createGroup);
-    const updatedUser = await fetchUser(auth.email, auth.password);
-    // const response = await fetch(`https://localhost:7063/api/User/${auth.id}`);
-    // const updatedData = await response.json();
-    setAuth(updatedUser);
+    // If group was successfully created, update user's groups on client.
+    if(createUserGroup.status === 200){
+      const updatedGroups = await fetchElement(`https://localhost:7063/api/User/${auth.id}/groups`);
+      setGroups(updatedGroups)
+    }
     setIsCreating(false);
-    
   };
 
   return (
@@ -43,7 +40,7 @@ export default function CreateGroup({ setIsCreating }) {
         >
           <TextField
             required
-			margin="dense"
+			      margin="dense"
             id="name"
             label="Name"
             name="name"
@@ -52,7 +49,7 @@ export default function CreateGroup({ setIsCreating }) {
           />
           <TextField
             required
-			margin="dense"
+			      margin="dense"
             id="description"
             label="Description"
             name="description"
@@ -64,7 +61,7 @@ export default function CreateGroup({ setIsCreating }) {
               type="submit"
               fullWidth
               variant="contained"
-			  size="small"
+			        size="small"
               sx={{ mt: "1rem", bgcolor: "#483434" }}
             >
               Create
@@ -73,7 +70,7 @@ export default function CreateGroup({ setIsCreating }) {
               type="button"
               fullWidth
               variant="outlined"
-			  size="small"
+			        size="small"
               sx={{ mt: "1rem", color: "#483434", borderColor: "#483434" }}
               onClick={() => setIsCreating(false)}
             >

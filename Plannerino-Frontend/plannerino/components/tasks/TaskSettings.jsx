@@ -1,16 +1,28 @@
 import { Button, Grid } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import authState from "atoms/authState";
+import tasksState from "atoms/tasksState";
+import fetchElement from "features/users/fetch-element";
+import deleteElement from "features/users/delete-element";
 
 export default function TaskSettings({ task, toggleEdit, setToggleEdit }) {
+  const auth = useRecoilValue(authState);
+  const setTasks = useSetRecoilState(tasksState);
+
   const handleEditTask = (taskId) => {
     setToggleEdit({ ...toggleEdit, [taskId]: !toggleEdit[taskId] });
   };
 
   const handleDeleteTask = async (taskId) => {
-    await fetch(`https://localhost:7063/api/UserTask/${taskId}`, {
-      method: "DELETE",
-    });
+    const deleteTask = await deleteElement(`https://localhost:7063/api/UserTask/${taskId}`);
+
+    // If the task was deleted successfully, update tasks on client
+    if (deleteTask === 200) {
+      const updatedTasksList = await fetchElement(`https://localhost:7063/api/User/${auth.id}/tasks`);
+      setTasks(updatedTasksList);
+    }
   };
 
   return (
@@ -32,7 +44,8 @@ export default function TaskSettings({ task, toggleEdit, setToggleEdit }) {
         }}
       >
         <Grid item xs={12} borderBottom={1}>
-          <Button size="small"
+          <Button
+            size="small"
             startIcon={<EditIcon aria-label="edit" />}
             onClick={() => handleEditTask(task.id)}
           >
@@ -40,7 +53,8 @@ export default function TaskSettings({ task, toggleEdit, setToggleEdit }) {
           </Button>
         </Grid>
         <Grid item xs={12}>
-          <Button size="small"
+          <Button
+            size="small"
             startIcon={<DeleteIcon aria-label="delete" />}
             onClick={() => handleDeleteTask(task.id)}
           >

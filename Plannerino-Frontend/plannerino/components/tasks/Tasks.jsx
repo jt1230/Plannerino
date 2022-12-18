@@ -1,49 +1,38 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Grid, IconButton, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
-import { useEffect } from "react";
-import { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import authState from "atoms/authState";
 import tasksState from "atoms/tasksState";
 import CreateTask from "components/tasks/CreateTask";
+import EditTask from "components/tasks/EditTask";
 import TaskSettings from "components/tasks/TaskSettings";
-import EditTask from "./EditTask";
+import fetchElement from "features/users/fetch-element";
 
 export default function Tasks() {
-  const [auth, setAuth] = useRecoilState(authState);
-  const [tasks, setTasks] = useRecoilState(tasksState);
+  const auth = useRecoilValue(authState);
+  const [dbTasks, setDbTasks] = useRecoilState(tasksState);
   const [sortedTasks, setSortedTasks] = useState([]);
   const [addTask, setAddTask] = useState(false);
   const [clickedTask, setClickedTask] = useState({});
   const [toggleSettings, setToggleSettings] = useState({});
-  const [toggleEdit, setToggleEdit] = useState(false);
+  const [toggleEdit, setToggleEdit] = useState({});
 
+  // Runs on first render, other components will update tasks.
   useEffect(() => {
     const getAllTasks = async () => {
-      const response = await fetch(
-        `https://localhost:7063/api/User/${auth.id}/tasks`
-      );
-      let data = await response.json();
-      setTasks(data);
+      let data = await fetchElement(`https://localhost:7063/api/User/${auth.id}/tasks`);
+      setDbTasks(data);
     };
     getAllTasks();
-    setSortedTasks([...tasks]);
-  }, [auth]);
+  }, []);
+
+   // To avoid callback hell, copy dbTasks to a new array that re-mounts everytime dbTasks changes.
+  useEffect(() => {
+    setSortedTasks([...dbTasks]);
+  }, [dbTasks]);
 
   const handleTaskClick = (task) => {
     setClickedTask({ ...task });
@@ -54,7 +43,7 @@ export default function Tasks() {
   };
 
   return (
-    <>
+    <Box sx={{height:"1rem"}}>
       {addTask ? <CreateTask setAddTask={setAddTask} /> : null}
       <Grid
         container
@@ -63,6 +52,7 @@ export default function Tasks() {
         justifyContent="space-between"
         alignItems="center"
         paddingX="1rem"
+        mt="1rem"        
       >
         <Grid item>
           <Typography variant="body1" fontWeight="bold" gutterBottom>
@@ -81,7 +71,7 @@ export default function Tasks() {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs={12} maxHeight="90%" overflow="auto">
+      <Grid item xs={12} maxHeight="26rem" overflow="auto">
         <List>
           {sortedTasks
             .sort(
@@ -143,6 +133,6 @@ export default function Tasks() {
             })}
         </List>
       </Grid>
-    </>
+    </Box>
   );
 }
